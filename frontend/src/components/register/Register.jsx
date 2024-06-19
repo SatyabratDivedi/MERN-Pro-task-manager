@@ -4,6 +4,7 @@ import {FiEye} from "react-icons/fi";
 import {LuEyeOff} from "react-icons/lu";
 import {Link} from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -32,15 +33,24 @@ const Register = () => {
     email === "" ? setError2(true) : setError2(false);
     if (name && email && password && password2 == password) {
       console.log(name, email, password);
-      // setName("");
-      // setEmail("");
-      // setPassword("");
-      // setPassword2("");
-      // fetchRegisterData();
+      fetchRegisterData();
+      setName("");
+      setEmail("");
+      setPassword("");
+      setPassword2("");
     }
   };
 
-
+  const fetchRegisterData = async () => {
+    try {
+      const res = await axios.post("/api/sign-up", {name, email, password});
+      console.log(res);
+      toast.success(res.data.msg);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.msg);
+    }
+  };
 
   return (
     <>
