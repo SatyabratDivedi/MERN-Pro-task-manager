@@ -3,9 +3,10 @@ import style from "./../login/login.module.css";
 import {FiEye} from "react-icons/fi";
 import {LuEyeOff} from "react-icons/lu";
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -27,27 +28,19 @@ const Register = () => {
       setError3(true);
       setPasswordErrMsg("required");
     }
-    username === "" ? setError1(true) : setError1(false);
+    name === "" ? setError1(true) : setError1(false);
     email === "" ? setError2(true) : setError2(false);
-    if (username && email && password && password2 == password) {
-      console.log(username, email, password);
-      setUsername("");
-      setEmail("");
-      setPassword("");
-      setPassword2("");
+    if (name && email && password && password2 == password) {
+      console.log(name, email, password);
+      // setName("");
+      // setEmail("");
+      // setPassword("");
+      // setPassword2("");
+      // fetchRegisterData();
     }
-    // if (password === "") {
-    //   setError3(true);
-    // } else {
-    //   setError3(false);
-    // }
-
-    // if(username !== "" && email !== "" && password !== "" && password2 !== ""){
-    //   setError2(false)
-    // }else{
-    //   setError2(true);
-    // }
   };
+
+
 
   return (
     <>
@@ -64,7 +57,7 @@ const Register = () => {
           <form action="">
             <div className={style.InpMain}>
               <div className={style.UserImg}></div>
-              <input type="text" name="name" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Name" id="" />
+              <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" id="" />
               {error1 && <div className={style.require}>*require</div>}
             </div>
             <div className={style.InpMain}>
