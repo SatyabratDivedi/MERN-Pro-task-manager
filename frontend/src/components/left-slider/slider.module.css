@@ -1,0 +1,36 @@
+.sliderContainer {
+  height: 100%;
+  padding-block: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-right: 1.3px solid #edf5fe;
+}
+.linkStyle {
+  width: 100%;
+  font-size: larger;
+  font-family: Poppins;
+}
+.navIcon {
+  padding-left: 20%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: larger;
+  margin-top: 9px;
+  padding-block: 5px;
+  text-decoration: none;
+  color: rgb(140, 139, 139);
+}
+.activeBackground {
+  background-color: #edf5fe;
+  color: black;
+}
+.logout {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: #cf3636;
+  margin-bottom: 24px;
+}

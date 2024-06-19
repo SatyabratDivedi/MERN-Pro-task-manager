@@ -1,0 +1,99 @@
+.mainBox {
+  background-color: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 17px;
+}
+.Circle {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+}
+.prioritySection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.priorityChild {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 0.5rem;
+  color: #707070;
+}
+.nameCircle {
+  background-color: #ffebeb;
+  border-radius: 50%;
+  height: 17px;
+  width: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+}
+.hero {
+  padding-block: 7px;
+  font-weight: 500;
+}
+.checklist {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  margin-top: 10px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.arrow {
+  height: 20px;
+  width: 20px;
+  border-radius: 3px;
+  color: #707070;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eeecec;
+}
+.todoBoxContainer {
+  height: auto;
+  /* display: none; */
+  margin-top: 10px;
+}
+.todoBox {
+  width: 100%;
+  border: 1.6px solid #dfdede;
+  font-family: "Inter", sans-serif;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 35px 10px 5px;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: justify;
+  margin-bottom: 9px;
+}
+input {
+  font-size: 30px;
+  margin-left: 6px;
+}
+.footer {
+    margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #767575;
+  font-size: 8px;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+}
+.catogaryList {
+    display: flex;
+    gap: 8px;
+}
+.footerbox {
+padding: 5px 10px;
+border-radius: 6px;
+background-color: #eeecec;
+}
