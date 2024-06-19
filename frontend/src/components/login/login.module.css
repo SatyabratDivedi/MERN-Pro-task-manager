@@ -1,0 +1,143 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Open Sans", sans-serif;
+}
+.left {
+  width: 60%;
+  height: 100vh;
+  background-color: #17a2b8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+.img {
+  background-color: #268d9e;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+img {
+  transform: translateY(30px);
+  margin-right: 20px;
+}
+.welcomeText {
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 10px;
+}
+
+.right {
+  width: 40%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.InpMain {
+  width: 400px;
+  height: 45px;
+  border: 1.4px solid #e2e5e7;
+  border-radius: 9px;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.InpMain input {
+  width: 350px;
+  border: none;
+  outline: none;
+  font-weight: 100;
+  height: 37px;
+  font-size: 15px;
+  color: #474646;
+  border-radius: 10px;
+}
+.InpMain input::placeholder {
+  color: #999;
+  font-weight: 100;
+}
+
+.require{
+  color: red;
+  font-size: 13px;
+  position: absolute;
+  top: 40px;
+  left: 10px;
+}
+.EmailImg {
+  background-image: url("src/assets/icon.png");
+  width: 28px;
+  height: 28px;
+  background-repeat: no-repeat;
+  background-size: 28px;
+  margin-right: 11px;
+}
+.PassImg {
+  background-image: url("src/assets/lock.png");
+  width: 28px;
+  height: 28px;
+  background-repeat: no-repeat;
+  background-size: 28px;
+  margin-right: 11px;
+}
+.UserImg {
+  background-image: url("src/assets/Frame 1036.png");
+  width: 28px;
+  height: 28px;
+  background-repeat: no-repeat;
+  background-size: 28px;
+  margin-right: 11px;
+}
+/* input::-ms-reveal {
+  display: none;
+} */
+
+.filledBtn {
+  width: 400px;
+  height: 45px;
+  background-color: #17a2b8;
+  color: white;
+  font-size: 15px;
+  border: none;
+  border-radius: 30px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.filledBtn:hover {
+  background-color: #00bcd8;
+}
+.blankBtn {
+  width: 400px;
+  height: 45px;
+  background-color: white;
+  color: #17a2b8;
+  font-size: 15px;
+  border: none;
+  border: 1.4px solid #17a2b8;
+  border-radius: 30px;
+  margin-top: 10px;
+  cursor: pointer;
+  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.blankBtn:hover {
+  background-color: rgb(247, 247, 247);
+  color: #17a2b8;
+}
