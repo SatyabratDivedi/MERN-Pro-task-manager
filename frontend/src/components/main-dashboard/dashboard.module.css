@@ -1,7 +1,5 @@
 .container {
   width: 100%;
-  overflow-x: scroll;
-  overflow: scroll;
 }
 .welcome {
   display: flex;
@@ -29,22 +27,45 @@
   color: #707070;
   margin-left: 10px;
 }
+.select {
+  border: none;
+  outline: none;
+  background-color: white;
+  padding: 0.5rem;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+}
+.option {
+  padding: 0.5rem;
+  font-family: "Poppins", sans-serif;
+}
+.scrollContainer {
+  width: 100%;
+  height: 82vh;
+  overflow-x: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #8daab9 #d6eaf4;
+  position: relative;
+}
 .boxMain {
   margin-top: 6px;
   display: flex;
+  flex-flow: row;
+  flex-wrap: nowrap;
   gap: 20px;
-  height: 80vh;
-  overflow-x: scroll;
-  overflow: scroll;
+  height: 77vh;
   padding: 2% 0 0 2%;
+  position: absolute;
 }
 .box {
-  float: right;
-  width: 22vw;
+  width: 320px;
   padding: 0 5px 5px 5px;
   border-radius: 7px;
   background-color: #eef2f5;
-  overflow: scroll;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #8daab9 #d6eaf4;
 }
 .boxHead {
   padding: 10px 10px;
@@ -55,4 +76,9 @@
   top: 0;
   z-index: 100;
   background-color: #eef2f5;
+}
+.addCollapseIcon{
+  font-size: 1.3rem;
+  display: flex;
+  gap: 10px;
 }

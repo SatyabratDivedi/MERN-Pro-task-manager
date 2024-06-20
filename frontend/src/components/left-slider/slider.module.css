@@ -32,5 +32,6 @@
   align-items: center;
   gap: 13px;
   color: #cf3636;
-  margin-bottom: 24px;
+  margin-bottom: 54px;
+  cursor: pointer;
 }

@@ -6,3 +6,6 @@
 .activeBackground {
   background-color: red;
 }
+html::-webkit-scrollbar-track {
+  background: blue; /* Change 'blue' to your preferred track color */
+}

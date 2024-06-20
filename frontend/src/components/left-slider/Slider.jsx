@@ -7,8 +7,6 @@ import {PiCodesandboxLogoLight} from "react-icons/pi";
 import { IoLogOutOutline } from "react-icons/io5";
 
 
-console.log('the first data is fatchted and the second data is to be updated')
-
 const Slider = () => {
   return (
     <>
