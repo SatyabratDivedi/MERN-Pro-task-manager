@@ -72,7 +72,7 @@ const Register = () => {
             </div>
             <div className={style.InpMain}>
               <div className={style.EmailImg}></div>
-              <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" id="" />
+              <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
               {error2 && <div className={style.require}>*require</div>}
             </div>
             <div className={style.InpMain}>

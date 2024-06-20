@@ -39,19 +39,17 @@ const PostCard = ({collapse, catogary}) => {
         </div>
         <div>
           <BsThreeDots onClick={() => setThreeDotOpen(!threeDotOpen)} className={style.threeDot} />
-          {threeDotOpen && (
-            <div className={style.threeDotElement}>
-              <div onClick={editTodoHandler} className={style.DotElement}>
-                Edit
-              </div>
-              <div onClick={shareTodoHandler} className={style.DotElement}>
-                Share
-              </div>
-              <div onClick={deleteTodoHandler} className={style.DotElement}>
-                Delete
-              </div>
+          <div style={{display: threeDotOpen ? "flex" : "none"}} className={style.threeDotElement}>
+            <div onClick={editTodoHandler} className={style.DotElement}>
+              Edit
             </div>
-          )}
+            <div onClick={shareTodoHandler} className={style.DotElement}>
+              Share
+            </div>
+            <div onClick={deleteTodoHandler} className={style.DotElement}>
+              Delete
+            </div>
+          </div>
         </div>
       </div>
       <div className={style.hero}>Hero Secion</div>
@@ -61,20 +59,16 @@ const PostCard = ({collapse, catogary}) => {
           {open ? <IoChevronUpSharp /> : <IoChevronDownSharp />}
         </div>
       </div>
-      {open ? (
-        <div className={style.todoBoxContainer}>
-          <div className={style.todoBox}>
-            <input type="checkbox" name="" id="" />
-            <div>First Todos lo</div>
-          </div>
-          <div className={style.todoBox}>
-            <input type="checkbox" name="" id="" />
-            <div>First Todos lo is the data and the secons</div>
-          </div>
+      <div style={{display: open ? "block" : "none"}} className={style.todoBoxContainer}>
+        <div className={style.todoBox}>
+          <input type="checkbox" name="" id="" />
+          <div>First Todos lo</div>
         </div>
-      ) : (
-        ""
-      )}
+        <div className={style.todoBox}>
+          <input type="checkbox" name="" id="" />
+          <div>First Todos lo is the data and the secons</div>
+        </div>
+      </div>
       <div className={style.footer}>
         <div style={{color: "white", background: catogary === "Done" ? "#63C05B" : "#CF3636"}} className={style.footerbox}>
           Feb 10th

@@ -60,7 +60,7 @@ const Login = () => {
           <form action="">
             <div className={style.InpMain}>
               <div className={style.EmailImg}></div>
-              <input type="text" name="" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" id="" />
+              <input type="email" name="" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required/>
               {error1 && <div className={style.require}>*require</div>}
             </div>
 

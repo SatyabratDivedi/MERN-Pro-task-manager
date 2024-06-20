@@ -13,9 +13,12 @@ const MainDashboard = () => {
       [item]: !prevState[item],
     }));
   };
-  const addTodo=()=>{
-    console.log('add clicked')
-  }
+  const addTodo = () => {
+    console.log("add clicked");
+  };
+  const addPeopleHandle = () => {
+    console.log("add people handle");
+  };
   return (
     <>
       <div className={style.container}>
@@ -26,7 +29,7 @@ const MainDashboard = () => {
         <div className={style.board}>
           <div>
             Board
-            <span className={style.boardChild}>
+            <span onClick={addPeopleHandle} className={style.boardChild}>
               <GoPeople /> Add People
             </span>
           </div>
@@ -43,7 +46,7 @@ const MainDashboard = () => {
                 <div className={style.boxHead}>
                   <div>{catogary}</div>
                   <div className={style.addCollapseIcon}>
-                    {catogary == "To do" && <IoAddSharp onClick={addTodo} style={{cursor:'pointer'}} />}
+                    {catogary == "To do" && <IoAddSharp onClick={addTodo} style={{cursor: "pointer"}} />}
                     <VscCollapseAll onClick={() => toggleCollapse(catogary)} style={{cursor: "pointer"}} />
                   </div>
                 </div>
