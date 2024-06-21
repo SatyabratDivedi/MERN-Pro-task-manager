@@ -4,15 +4,14 @@ import style from "./postCard.module.css";
 import {BsThreeDots} from "react-icons/bs";
 import {IoChevronUpSharp} from "react-icons/io5";
 import {IoChevronDownSharp} from "react-icons/io5";
-
+// all done
 const PostCard = ({collapse, catogary}) => {
   const [open, setOpen] = useState(false);
   const [threeDotOpen, setThreeDotOpen] = useState(false);
 
   useEffect(() => {
-    collapse ? setOpen(true) : setOpen(false);
+    setOpen(false);
   }, [collapse]);
-
   const editTodoHandler = () => {
     console.log("edit");
     setThreeDotOpen(false);
@@ -61,11 +60,11 @@ const PostCard = ({collapse, catogary}) => {
       </div>
       <div style={{display: open ? "block" : "none"}} className={style.todoBoxContainer}>
         <div className={style.todoBox}>
-          <input type="checkbox" name="" id="" />
+          <input className={style.checkBox}  type="checkbox" name="" id="" />
           <div>First Todos lo</div>
         </div>
         <div className={style.todoBox}>
-          <input type="checkbox" name="" id="" />
+          <input className={style.checkBox} type="checkbox" name="" id="" />
           <div>First Todos lo is the data and the secons</div>
         </div>
       </div>

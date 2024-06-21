@@ -1,0 +1,38 @@
+.mainContainer {
+  padding: 2%;
+  font-family: "Open Sans";
+}
+.heading {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 7px;
+}
+.boxContainer {
+  display: flex;
+  margin-top: 30px;
+  gap: 40px;
+}
+.box {
+  background-color: #f7fbff;
+  width: 30%;
+  height: 220px;
+  border-radius: 12px;
+  padding: 30px 25px;
+}
+.cercle {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: #90c4cc;
+}
+.boxTxtHead{
+    display: flex;
+    justify-content: space-between;
+   margin-bottom: 20px;
+}
+.boxTxt{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+}

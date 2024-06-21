@@ -10,6 +10,8 @@ import Register from "./components/register/Register.jsx";
 import AnalyticsRoute from "./components/analytics-dashboard/AnalyticsRoute.jsx";
 import SettingPage from "./components/settingRoute/SettingPage.jsx";
 import MainDashboard from "./components/main-dashboard/MainDashboard.jsx";
+import {store} from "./reduxStore/store.js";
+import {Provider} from "react-redux";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +44,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-    <Toaster />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+      <Toaster />
+    </Provider>
   </React.StrictMode>
 );

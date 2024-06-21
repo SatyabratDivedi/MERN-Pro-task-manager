@@ -4,20 +4,20 @@ import {VscCollapseAll} from "react-icons/vsc";
 import PostCard from "../postCard/PostCard";
 import {useState} from "react";
 import {IoAddSharp} from "react-icons/io5";
+import {useDispatch} from "react-redux";
+import {peopleAddFlash} from "../../reduxStore/FlashSlice";
 
 const MainDashboard = () => {
-  const [collapse, setCollapse] = useState(false);
+  const dispatch = useDispatch();
+  const [collapse, setCollapse] = useState({});
   const toggleCollapse = (item) => {
-    setCollapse((prevState) => ({
-      ...prevState,
-      [item]: !prevState[item],
-    }));
+    setCollapse((prevState) => ({...prevState, [item]: !prevState[item]}));
   };
   const addTodo = () => {
     console.log("add clicked");
   };
   const addPeopleHandle = () => {
-    console.log("add people handle");
+    dispatch(peopleAddFlash(true));
   };
   return (
     <>

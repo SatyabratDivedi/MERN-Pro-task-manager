@@ -8,7 +8,7 @@
   width: 100vw;
   height: 100vh;
 }
-.container{
+.container {
   background-color: white;
   width: 500px;
   height: 220px;
@@ -19,55 +19,53 @@
   gap: 20px;
   justify-content: center;
 }
-.headerTxt{
+.headerTxt {
   font-family: "Noto Sans", sans-serif;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
 }
-.emailInput{
+.emailInput {
   width: 160%;
   gap: 10px;
   font-size: 15px;
-  scale: .6;
+  scale: 0.6;
   transform: translateX(-35%);
-
 }
-input{
+.input {
   width: 100%;
   border: none;
   outline: none;
-  border: 2px solid rgb(213, 211, 211);
+  border: 2px solid rgb(169, 169, 169);
   border-radius: 10px;
-  font-size: 15px;
-  padding: 15px; 
+  padding: 15px;
 }
-input::placeholder{
+.input::placeholder {
   color: gray;
   /* font-size: 15px; */
 }
-.bothButton{
+.bothButton {
   display: flex;
   justify-content: space-between;
 }
-.cancleBtn{
+.cancleBtn {
   background-color: white;
   font-weight: 600;
   cursor: pointer;
   width: 45%;
   border: 1.2px solid rgba(207, 54, 54, 1);
   color: rgba(207, 54, 54, 1);
-  padding: 5px;
+  padding: 8px;
   border-radius: 12px;
   font-family: "Poppins", sans-serif;
 }
-.addEmailBtn{
-  background-color: #17A2B8;
+.addEmailBtn {
+  background-color: #17a2b8;
   font-weight: 600;
   cursor: pointer;
   width: 45%;
   border: none;
   color: white;
-  padding: 5px;
+  padding: 8px;
   border-radius: 12px;
   font-family: "Poppins", sans-serif;
 }

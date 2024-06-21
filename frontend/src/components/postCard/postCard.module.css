@@ -129,9 +129,10 @@
   text-align: justify;
   margin-bottom: 9px;
 }
-input {
+.checkBox {
   font-size: 30px;
   margin-left: 6px;
+  cursor: pointer;
 }
 .footer {
   margin-top: 25px;
