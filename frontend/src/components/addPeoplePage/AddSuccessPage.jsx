@@ -16,7 +16,7 @@ const AddSuccessPage = ({email}) => {
             {email} added to board
           </div>
           <button onClick={() => dispatch(successFlash(false))} style={{ margin: 'auto'}} className={style.addEmailBtn}>
-            Ok Got it
+            Okay, got it!
           </button>
         </div>
       </div>

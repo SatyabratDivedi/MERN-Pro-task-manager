@@ -6,6 +6,7 @@ const initialState = {
     display: false,
     addedEmail:''
   },
+  addTodoFlashPage: false,
 }
 
 export const allFlashSlice = createSlice({
@@ -18,9 +19,12 @@ export const allFlashSlice = createSlice({
         successFlash: (store, action) => {
             store.successFlashPage.display = action.payload.display
             store.successFlashPage.addedEmail = action.payload.addedEmail
+        },
+        addTodoFlash: (store, action) => {
+            store.addTodoFlashPage = action.payload
         }
     }
 })
 
-export const { peopleAddFlash, successFlash} = allFlashSlice.actions
+export const { peopleAddFlash, successFlash, addTodoFlash} = allFlashSlice.actions
 export default allFlashSlice.reducer

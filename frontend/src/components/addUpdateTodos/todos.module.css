@@ -1,0 +1,223 @@
+.mainContainer {
+  background-color: rgba(48, 61, 67, 0.55);
+  position: absolute;
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+.container {
+  background-color: white;
+  width: 650px;
+  max-height: fit-content;
+  border-radius: 16px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 5px;
+  /* justify-content: center; */
+}
+.titleSection {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  min-width: fit-content;
+}
+.starIcon {
+  color: #ff0000;
+  margin-left: 5px;
+  font-size: 7px;
+}
+.input {
+  width: 100%;
+  border: none;
+  outline: none;
+  border: 1.4px solid rgb(224, 224, 224);
+  box-shadow: 0 1.4px 2px rgba(0, 0, 0, 0.1);
+  padding: 12px 15px;
+  font-size: 15px;
+  border-radius: 5px;
+  margin-top: 5px;
+  font-family: "Inter", sans-serif;
+  color: black;
+}
+.input::placeholder {
+  color: gray;
+  /* font-size: 15px; */
+}
+
+.priorityContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.priorityBox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 7px;
+  border: 1.4px solid rgb(224, 224, 224);
+  padding: 5px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgb(126, 126, 126);
+  cursor: pointer;
+}
+.priorityCircle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.assignContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+.downIcon {
+  font-size: 20px;
+  position: absolute;
+  right: 10px;
+  color: rgb(151, 151, 151);
+  cursor: pointer;
+  font-size: 24px;
+  padding: 5px;
+}
+.hiddenAssignEmail {
+  position: absolute;
+  width: 87.8%;
+  right: 0;
+  top: 45px;
+  background-color: white;
+  border: 1.4px solid rgb(224, 224, 224);
+  box-shadow: 0 1.4px 2px rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+  border-radius: 5px;
+  margin-top: 6px;
+  font-family: "Inter", sans-serif;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  padding-block: 20px;
+}
+.assignEmailContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+.emailAndLetters {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.emailTwoLetter {
+  background-color: #ffebeb;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.assignBtn {
+  border: 2px solid #e2e2e2;
+  color: #878787;
+  font-weight: 500;
+  padding: 5px 50px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.checklistContainer {
+  display: flex;
+  align-items: center;
+}
+.bothButton {
+  display: flex;
+  justify-content: space-between;
+}
+.cancleBtn {
+  background-color: white;
+  font-weight: 600;
+  cursor: pointer;
+  width: 30%;
+  border: 1.2px solid rgba(207, 54, 54, 1);
+  color: rgba(207, 54, 54, 1);
+  padding: 8px;
+  border-radius: 12px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+}
+.addEmailBtn {
+  background-color: #17a2b8;
+  font-weight: 600;
+  cursor: pointer;
+  width: 30%;
+  border: none;
+  color: white;
+  padding: 8px;
+  border-radius: 12px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+}
+.checklistContainer {
+  position: relative;
+  width: 100%;
+  border: 1.4px solid rgb(224, 224, 224);
+  box-shadow: 0 1.4px 2px rgba(0, 0, 0, 0.1);
+  padding: 8px 30px;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+.todoCheckBox {
+  position: absolute;
+  left: 10px;
+}
+.todoDeleteIcon {
+  position: absolute;
+  right: 10px;
+  color: #cf3636;
+  cursor: pointer;
+  font-size: 24px;
+  padding: 3px;
+}
+.todoInput {
+  width: 100%;
+  font-size: 15px;
+  border: none;
+  outline: none;
+  font-family: "Inter", sans-serif;
+}
+.addNewSection {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-block: 15px;
+  color: #767575;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  max-width: fit-content;
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+.selectDateBtn {
+  background-color: white;
+  font-weight: 500;
+  cursor: pointer;
+  width: 30%;
+  border: 1.2px solid rgb(180, 179, 179);
+  color: rgb(125, 124, 124);
+  padding: 8px;
+  border-radius: 12px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+}

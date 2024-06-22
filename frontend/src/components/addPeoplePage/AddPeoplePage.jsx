@@ -9,7 +9,6 @@ const AddPeoplePage = () => {
   const addEmailHandler = (e) => {
     e.preventDefault;
     if (emailEdit) {
-      console.log(emailEdit);
       dispatch(peopleAddFlash(false));
       setEmailEdit("");
       dispatch(successFlash(true));
