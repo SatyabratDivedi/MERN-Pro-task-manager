@@ -4,11 +4,13 @@ import style from "./postCard.module.css";
 import {BsThreeDots} from "react-icons/bs";
 import {IoChevronUpSharp} from "react-icons/io5";
 import {IoChevronDownSharp} from "react-icons/io5";
-// all done
+import {useDispatch} from "react-redux";
+import {deleteTodoFlash} from "../../reduxStore/FlashSlice";
+
 const PostCard = ({collapse, catogary}) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [threeDotOpen, setThreeDotOpen] = useState(false);
-
   useEffect(() => {
     setOpen(false);
   }, [collapse]);
@@ -22,7 +24,7 @@ const PostCard = ({collapse, catogary}) => {
   };
   const deleteTodoHandler = () => {
     console.log("delete");
-    setThreeDotOpen(false);
+    dispatch(deleteTodoFlash(true));
   };
 
   return (
@@ -60,7 +62,7 @@ const PostCard = ({collapse, catogary}) => {
       </div>
       <div style={{display: open ? "block" : "none"}} className={style.todoBoxContainer}>
         <div className={style.todoBox}>
-          <input className={style.checkBox}  type="checkbox" name="" id="" />
+          <input className={style.checkBox} type="checkbox" name="" id="" />
           <div>First Todos lo</div>
         </div>
         <div className={style.todoBox}>

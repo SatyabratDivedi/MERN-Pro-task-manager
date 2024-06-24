@@ -1,18 +1,58 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import style from "./setting.module.css";
 import {FiEye} from "react-icons/fi";
 import {LuEyeOff} from "react-icons/lu";
 import {IoPersonOutline} from "react-icons/io5";
-import {CiMail} from "react-icons/ci";
-import {CiLock} from "react-icons/ci";
+import {CiMail, CiLock} from "react-icons/ci";
+import axios from "axios";
+import toast from "react-hot-toast";
+import {useNavigate} from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const SettingPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+  const formData = {
+    name: "",
+    email: "",
+    oldPassword: "",
+    newPassword: "",
+  };
+  const [user, setUser] = useState({formData});
+  const editHandle = (e) => {
+    setUser({...user, [e.target.name]: e.target.value});
+    if (e.target.name === "oldPassword") {
+      e.target.value == "" ? setShowPassword(false) : setShowPassword(true);
+    }
+    if (e.target.name === "newPassword") {
+      e.target.value == "" ? setShowPassword2(false) : setShowPassword2(true);
+    }
+  }; 
+  const {name, email, oldPassword, newPassword} = user;
+
+  const fetchLoginUser = async () => {
+    try {
+      const res = await axios.get("/api/getLoginUserDetails");
+      console.log(res.data.user);
+      const updateUserInfo = (name, email) => {
+        setUser((prevState) => ({...prevState, name, email}));
+      };
+      updateUserInfo(res.data.user?.name, res.data.user?.email);
+    } catch (error) {
+      if (error.response.data.msg == "unauthorized! please login first") {
+        toast.error(error.response.data.msg);
+        navigate("/login");
+        return;
+      }
+      toast.error(error.code);
+    }
+  };
+
+  useEffect(() => {
+    fetchLoginUser();
+  }, []);
+
   return (
     <>
       <div className={style.mainContainer}>
@@ -21,19 +61,19 @@ const SettingPage = () => {
           <div className={style.box}>
             <div className={style.imgInpArea}>
               <IoPersonOutline className={style.icon} />
-              <input className={style.input} type="text" name="name" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+              <input className={style.input} type="text" name="name" placeholder="Name" value={name} onChange={editHandle} />
             </div>
           </div>
           <div className={style.box}>
             <div className={style.imgInpArea}>
               <CiMail className={style.icon} />
-              <input className={style.input} type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input className={style.input} type="email" name="email" placeholder="Email" value={email} onChange={editHandle} />
             </div>
           </div>
           <div className={style.box}>
             <div className={style.imgInpArea}>
               <CiLock className={style.icon} />
-              <input className={style.input} type={showPassword ? "text" : "password"} name="oldPassword" placeholder="Old Password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} />
+              <input className={style.input} type={showPassword ? "password" : "text"} name="oldPassword" placeholder="Old Password" value={oldPassword} onChange={editHandle} />
             </div>
             <div onClick={() => setShowPassword(!showPassword)} style={{fontSize: "22px", cursor: "pointer", color: "#999"}}>
               {showPassword ? <LuEyeOff /> : <FiEye />}
@@ -42,7 +82,7 @@ const SettingPage = () => {
           <div className={style.box}>
             <div className={style.imgInpArea}>
               <CiLock className={style.icon} />
-              <input className={style.input} type={showPassword2 ? "text" : "password"} name="newPassword" placeholder="New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+              <input className={style.input} type={showPassword2 ? "password" : "text"} name="newPassword" placeholder="New Password" value={newPassword} onChange={editHandle} />
             </div>
             <div onClick={() => setShowPassword2(!showPassword2)} style={{fontSize: "22px", cursor: "pointer", color: "#999"}}>
               {showPassword2 ? <LuEyeOff /> : <FiEye />}

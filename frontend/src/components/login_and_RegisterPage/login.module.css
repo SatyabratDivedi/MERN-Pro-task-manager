@@ -43,6 +43,12 @@ img {
   justify-content: center;
   align-items: center;
 }
+.formHeaderTxt {
+  margin-bottom: 50px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 30px;
+}
 .InpMain {
   width: 400px;
   height: 45px;
@@ -71,40 +77,18 @@ img {
   font-weight: 100;
 }
 
-.require{
+.require {
   color: red;
   font-size: 13px;
   position: absolute;
   top: 40px;
   left: 10px;
 }
-.EmailImg {
-  background-image: url("src/assets/icon.png");
-  width: 28px;
-  height: 28px;
-  background-repeat: no-repeat;
-  background-size: 28px;
-  margin-right: 11px;
+.icon {
+  font-size: 24px;
+  color: #999;
+  margin-right: 10px;
 }
-.PassImg {
-  background-image: url("src/assets/lock.png");
-  width: 28px;
-  height: 28px;
-  background-repeat: no-repeat;
-  background-size: 28px;
-  margin-right: 11px;
-}
-.UserImg {
-  background-image: url("src/assets/Frame 1036.png");
-  width: 28px;
-  height: 28px;
-  background-repeat: no-repeat;
-  background-size: 28px;
-  margin-right: 11px;
-}
-/* input::-ms-reveal {
-  display: none;
-} */
 
 .filledBtn {
   width: 400px;
@@ -140,4 +124,16 @@ img {
 .blankBtn:hover {
   background-color: rgb(247, 247, 247);
   color: #17a2b8;
+}
+.accountText {
+  margin-block: 20px;
+  margin-bottom: 5px;
+  color: #636363;
+};
+
+.eyeIcon{
+  color: #999;
+  font-size: 22px;
+  cursor: pointer;
+  translate: "-15px"
 }

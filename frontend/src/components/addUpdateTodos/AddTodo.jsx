@@ -2,27 +2,44 @@ import {useDispatch} from "react-redux";
 import style from "./todos.module.css";
 import {addTodoFlash} from "../../reduxStore/FlashSlice";
 import {FaStarOfLife} from "react-icons/fa6";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {FaAngleDown} from "react-icons/fa6";
 import {MdDelete} from "react-icons/md";
 import {IoAddOutline} from "react-icons/io5";
 import DatePickerComponent from "../DatePickerComponent/DatePickerComponent";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Skeleton from "react-loading-skeleton";
 
 const AddTodo = () => {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(null);
   const [showAssignContainer, setShowAssignContainer] = useState(false);
+  const [loginUserData, setLoginUserData] = useState({});
 
   const todoArr = {
     title: "",
     priority: "",
     assignTo: [],
-    Checklist: [
-    ],
+    Checklist: [],
     date: "",
   };
   const [todoData, setTodoData] = useState(todoArr);
   const {title, priority, assignTo, Checklist, date} = todoData;
+
+  const fetchLoginUser = async () => {
+    try {
+      const res = await axios.get("/api/getLoginUserDetails");
+      console.log(res.data.user);
+        setLoginUserData(res.data.user);
+    } catch (error) {
+      toast.error(error.code);
+    }
+  };
+
+  useEffect(() => {
+    fetchLoginUser();
+  }, []);
 
   const assignClkHandler = () => {
     setTodoData({...todoData, assignTo: "Satya@gmail.com"});
@@ -77,15 +94,31 @@ const AddTodo = () => {
               <input onClick={() => setShowAssignContainer(!showAssignContainer)} className={style.input} onChange={(e) => setEmailEdit(e.target.value)} value="" placeholder="Add a assignee" name="" id="" />
               <FaAngleDown className={style.downIcon} />
               <div style={{display: showAssignContainer ? "" : "none"}} className={style.hiddenAssignEmail}>
-                <div className={style.assignEmailContainer}>
-                  <div className={style.emailAndLetters}>
-                    <div className={style.emailTwoLetter}>SA</div>
-                    <div>Satya@gmail.com</div>
+                {!loginUserData?.assignedUsers || loginUserData?.assignedUsers.length === 0 ? (
+                  <div className={style.assignEmailContainer}>
+                    <div className={style.emailAndLetters}>
+                      <div className={style.emailTwoLetter}>
+                        <Skeleton />
+                      </div>
+                      <div>
+                        <Skeleton width={"100px"} />
+                      </div>
+                    </div>
+                    <div onClick={assignClkHandler} className={style.assignBtn}>
+                      <Skeleton />
+                    </div>
                   </div>
-                  <div onClick={assignClkHandler} className={style.assignBtn}>
-                    Assign
-                  </div>
-                </div>
+                ) : (
+                  loginUserData.assignedUsers.map((email) => (
+                    <div key={email} className={style.assignEmailContainer}>
+                      <div className={style.emailAndLetters}>
+                        <div className={style.emailTwoLetter}>SA</div>
+                        <div>{email || <Skeleton />}</div>
+                      </div>
+                      <div className={style.assignBtn}>Assign</div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
             <div style={{display: "flex", flexDirection: "column"}}>
