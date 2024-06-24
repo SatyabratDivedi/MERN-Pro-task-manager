@@ -4,7 +4,8 @@ const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const route = require("./api/userAPI");
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
+const route2 = require("./api/todoPostAPI");
 const app = express();
 
 app.use(cookieParser())
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", route);
+app.use("/api", route2);
 app.listen(PORT, () => {
   console.log(`app is running on port ${PORT}`);
 });

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const assignedUserModel = require("./assignUserSchema");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -17,6 +18,11 @@ const userSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "post",
+    },
+  ],
+  assignedUsers: [
+    {
+      type: String,
     },
   ],
 });
