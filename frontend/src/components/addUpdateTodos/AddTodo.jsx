@@ -19,8 +19,9 @@ const AddTodo = () => {
 
   const todoArr = {
     title: "",
+    catogary: "TODO",
     priority: "",
-    assignTo: [],
+    assignTo: "",
     Checklist: [],
     date: "",
   };
@@ -31,7 +32,7 @@ const AddTodo = () => {
     try {
       const res = await axios.get("/api/getLoginUserDetails");
       console.log(res.data.user);
-        setLoginUserData(res.data.user);
+      setLoginUserData(res.data.user);
     } catch (error) {
       toast.error(error.code);
     }
@@ -39,10 +40,13 @@ const AddTodo = () => {
 
   useEffect(() => {
     fetchLoginUser();
+    setTimeout(() => {
+      console.log(loginUserData);
+    }, 2);
   }, []);
 
-  const assignClkHandler = () => {
-    setTodoData({...todoData, assignTo: "Satya@gmail.com"});
+  const assignClkHandler = (email) => {
+    setTodoData({...todoData, assignTo: email});
     setShowAssignContainer(!showAssignContainer);
   };
 
@@ -50,8 +54,14 @@ const AddTodo = () => {
     setSelectedDate(date);
     setTodoData({...todoData, date: date.toLocaleDateString("en-IN")});
   };
-  const todoDataSaveHandler = () => {
+  const todoDataSaveHandler = async () => {
     console.log(todoData);
+    try {
+      const res = await axios.post("/api/createPost", todoData);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const addNewCheckList = () => {
     setTodoData({...todoData, Checklist: [...Checklist, {todoContent: "", isCompleted: false}]});
@@ -76,46 +86,38 @@ const AddTodo = () => {
                 <div>Select Priority</div>
                 <FaStarOfLife className={style.starIcon} />
               </div>
-              <div className={style.priorityBox}>
+              <div style={{background: priority == "HIGH PRIORITY" ? "#EEECEC" : ""}} className={style.priorityBox}>
                 <div style={{background: "#FF2473"}} className={style.priorityCircle}></div>
                 <div onClick={() => setTodoData({...todoData, priority: "HIGH PRIORITY"})}>HIGH PRIORITY</div>
               </div>
-              <div className={style.priorityBox}>
+              <div style={{background: priority == "MODERATE PRIORITY" ? "#EEECEC" : ""}} className={style.priorityBox}>
                 <div style={{background: "#18B0FF"}} className={style.priorityCircle}></div>
                 <div onClick={() => setTodoData({...todoData, priority: "MODERATE PRIORITY"})}>MODERATE PRIORITY</div>
               </div>
-              <div className={style.priorityBox}>
+              <div style={{background: priority == "LOW PRIORITY" ? "#EEECEC" : ""}} className={style.priorityBox}>
                 <div style={{background: "#63C05B"}} className={style.priorityCircle}></div>
                 <div onClick={() => setTodoData({...todoData, priority: "LOW PRIORITY"})}>LOW PRIORITY</div>
               </div>
             </div>
             <div className={style.assignContainer}>
               <div className={style.titleSection}>Assign to</div>
-              <input onClick={() => setShowAssignContainer(!showAssignContainer)} className={style.input} onChange={(e) => setEmailEdit(e.target.value)} value="" placeholder="Add a assignee" name="" id="" />
+              <input onClick={() => setShowAssignContainer(!showAssignContainer)} className={style.input} value={assignTo} placeholder="Add a assignee" name="" id="" />
               <FaAngleDown className={style.downIcon} />
               <div style={{display: showAssignContainer ? "" : "none"}} className={style.hiddenAssignEmail}>
                 {!loginUserData?.assignedUsers || loginUserData?.assignedUsers.length === 0 ? (
                   <div className={style.assignEmailContainer}>
-                    <div className={style.emailAndLetters}>
-                      <div className={style.emailTwoLetter}>
-                        <Skeleton />
-                      </div>
-                      <div>
-                        <Skeleton width={"100px"} />
-                      </div>
-                    </div>
-                    <div onClick={assignClkHandler} className={style.assignBtn}>
-                      <Skeleton />
-                    </div>
+                    <div> ❌ There is no any assign user ! Please assign.</div>
                   </div>
                 ) : (
-                  loginUserData.assignedUsers.map((email) => (
-                    <div key={email} className={style.assignEmailContainer}>
+                  loginUserData?.assignedUsers?.map((user) => (
+                    <div key={typeof email} className={style.assignEmailContainer}>
                       <div className={style.emailAndLetters}>
-                        <div className={style.emailTwoLetter}>SA</div>
-                        <div>{email || <Skeleton />}</div>
+                        <div className={style.emailTwoLetter}>{user.email[1] === "@" || user.email[1] === "." ? user.email[0].toUpperCase() : user.email.slice(0, 2).toUpperCase() || <Skeleton />}</div>
+                        <div>{user.email || <Skeleton />}</div>
                       </div>
-                      <div className={style.assignBtn}>Assign</div>
+                      <div onClick={() => assignClkHandler(user.email)} className={style.assignBtn}>
+                        Assign
+                      </div>
                     </div>
                   ))
                 )}

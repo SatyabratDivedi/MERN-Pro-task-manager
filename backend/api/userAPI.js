@@ -2,9 +2,9 @@ const express = require("express");
 const route = express();
 const bcrypt = require("bcrypt");
 const userModel = require("../models/userSchema");
-const postModel = require("../models/postSchema");
 const assignUserModel = require("../models/assignUserSchema");
 var jwt = require("jsonwebtoken");
+const postModel = require("../models/postSchema");
 
 route.post("/sign-up", async (req, res) => {
   const {name, email, password} = req.body;
@@ -47,18 +47,17 @@ route.post("/sign-in", async (req, res) => {
 route.post("/addAssignUser", authCheck, async (req, res) => {
   const {email} = req.body;
   try {
-    const whoAssign = await userModel.findById(req.user.user._id);
-    const alreadyAssign = whoAssign.assignedUsers.includes(email);
-    if (email == whoAssign.email) {
+    const whoAssigned = await userModel.findById(req.user._id).populate("assignedUsers");
+    const isAlreadyAssign = whoAssigned.assignedUsers.find((user) => user.email == email);
+    if (email == whoAssigned.email) {
       return res.status(409).json({msg: "you can't assign yourself"});
     }
-    if (alreadyAssign) {
+    if (isAlreadyAssign) {
       console.log("user already assign hai");
       return res.status(409).json({msg: "this user has already assign by you"});
     }
-    await assignUserModel({email}).save();
-
-    await userModel.findByIdAndUpdate(whoAssign._id, {$push: {assignedUsers: email}}, {new: true});
+    const assignNewUser = await assignUserModel({email}).save();
+    await userModel.findByIdAndUpdate(whoAssigned._id, {$push: {assignedUsers: assignNewUser._id}}, {new: true});
     console.log("new user assign huaa");
     return res.status(200).json({msg: "assign user created successfully"});
   } catch (error) {
@@ -66,8 +65,9 @@ route.post("/addAssignUser", authCheck, async (req, res) => {
     return res.status(500).json({msg: "An error occurred"});
   }
 });
+
 route.get("/getLoginUserDetails", authCheck, async (req, res) => {
-  const findLoginUser = await userModel.findById(req.user.user._id);
+  const findLoginUser = await userModel.findById(req.user._id).populate("assignedUsers");
   return res.status(200).json({user: findLoginUser});
 });
 
@@ -89,7 +89,7 @@ function authCheck(req, res, next) {
   }
   try {
     const user = jwt.verify(token, "shhh");
-    req.user = user;
+    req.user = user.user;
     next();
   } catch (error) {
     return res.status(401).json({msg: "Token is invalid or expired"});

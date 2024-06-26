@@ -2,8 +2,8 @@ import style from "./dashboard.module.css";
 import {GoPeople} from "react-icons/go";
 import {VscCollapseAll} from "react-icons/vsc";
 import PostCard from "../postCard/PostCard";
-import {useEffect, useState} from "react";
-import {IoAddSharp} from "react-icons/io5";
+import {useEffect, useMemo, useState} from "react";
+import {IoAddSharp, IoFastFood} from "react-icons/io5";
 import {useDispatch, useSelector} from "react-redux";
 import {addTodoFlash, peopleAddFlash} from "../../reduxStore/FlashSlice";
 import axios from "axios";
@@ -17,20 +17,20 @@ const MainDashboard = () => {
   const [collapse, setCollapse] = useState({});
   const [userData, setUserData] = useState();
   const isLogin = useSelector((state) => state.loginReducer.isLoginState);
+  const changeCatogary = useSelector((state) => state.changeCatogaryReducer.value);
+  console.log("changeCatogary: ", changeCatogary);
+  const [allPosts, setAllPosts] = useState([]);
+  const [changePostPlace, setChangePostPlace] = useState(false);
+
   const toggleCollapse = (item) => {
     setCollapse((prevState) => ({...prevState, [item]: !prevState[item]}));
   };
-  // const addTodo = () => {
-  //   console.log("add clicked");
-  // };
   const addPeopleHandle = () => {
     dispatch(peopleAddFlash(true));
   };
 
   const fetchUserDetails = async () => {
     const isFirstVisit = localStorage.getItem("firstVisit") === null;
-    console.log(isFirstVisit);
-    console.log(isLogin);
     let toastId;
     if (isFirstVisit) {
       setTimeout(() => {
@@ -39,7 +39,7 @@ const MainDashboard = () => {
     }
     try {
       const data = await axios.get("/api/getLoginUserDetails");
-      console.log(data)
+      console.log(data);
       setUserData(data.data);
       if (isFirstVisit) {
         setTimeout(() => {
@@ -72,10 +72,37 @@ const MainDashboard = () => {
       }, 1000);
     }
   };
-
+  const fetchAllPosts = async () => {
+    // const toastId = toast.loading("Fetching posts...");
+    try {
+      const res = await axios.get("/api/get_all_posts");
+      console.log(res.data);
+      setAllPosts(res.data);
+      // toast.success("Catogary Arranged", {
+      //   id: toastId,
+      // });
+    } catch (error) {
+      console.error(error.post, error);
+      // toast.error("Something wrong", {
+      //   id: toastId,
+      // });
+    }
+  };
   useEffect(() => {
     fetchUserDetails();
   }, []);
+  useEffect(() => {
+    fetchAllPosts();
+  }, [allPosts]);
+
+  const getCatogoriesPosts = (catogory) => {
+    console.log(catogory);
+    console.log(allPosts);
+    if (catogory == "To do") return allPosts?.TODO || [];
+    if (catogory == "Backlog") return allPosts?.BACKLOG || [];
+    if (catogory == "Done") return allPosts?.DONE || [];
+    if (catogory == "in Progress") return allPosts?.INPROCESS || [];
+  };
 
   function formatDateSimple(date) {
     const suffixes = ["th", "st", "nd", "rd"];
@@ -96,7 +123,7 @@ const MainDashboard = () => {
         // ) :
         <div className={style.container}>
           <div className={style.welcome}>
-            <div>Welcome! { userData?.user.name ||  <Skeleton height={20} width={150} />}</div>
+            <div>Welcome! {userData?.user?.name || <Skeleton height={20} width={150} />}</div>
             <div className={style.date}>{date}</div>
           </div>
           <div className={style.board}>
@@ -124,8 +151,8 @@ const MainDashboard = () => {
                     </div>
                   </div>
                   <div style={{paddingInline: "10px"}}>
-                    {[1, 2, 3].map((_, i) => (
-                      <PostCard key={i} collapse={collapse[catogary]} catogary={catogary} />
+                    {getCatogoriesPosts(catogary).map((post, i) => (
+                      <PostCard key={i} post={post} collapse={collapse[catogary]} catogary={catogary} changePostPlace={changePostPlace} setChangePostPlace={setChangePostPlace} />
                     ))}
                   </div>
                 </div>

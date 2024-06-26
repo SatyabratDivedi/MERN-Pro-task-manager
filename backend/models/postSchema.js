@@ -22,12 +22,11 @@ const postSchema = new mongoose.Schema({
   },
   todosList: [
     {
-      type: String,
+      todoContent: String,
       isCompleted: Boolean,
-      required: true,
     },
   ],
-  dueData: {
+  date: {
     type: String,
   },
 });

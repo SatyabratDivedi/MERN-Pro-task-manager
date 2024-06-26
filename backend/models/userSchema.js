@@ -22,7 +22,8 @@ const userSchema = new mongoose.Schema({
   ],
   assignedUsers: [
     {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "assignUser",
     },
   ],
 });
