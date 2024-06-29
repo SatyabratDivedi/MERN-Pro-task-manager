@@ -1,9 +1,10 @@
-
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import './DatePickerStyles.css';
+import React from 'react';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "./DatePickerStyles.css";
 
 const DatePickerComponent = ({ selectedDate, onDateChange }) => {
+
   return (
     <div>
       <DatePicker
@@ -14,7 +15,7 @@ const DatePickerComponent = ({ selectedDate, onDateChange }) => {
         showYearDropdown
         dropdownMode="select"
         className="custom-datepicker"
-        placeholderText="Select a date"
+        placeholderText="Select Due Date"
       />
     </div>
   );

@@ -10,6 +10,7 @@ import DatePickerComponent from "../DatePickerComponent/DatePickerComponent";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Skeleton from "react-loading-skeleton";
+import {increaseVal} from "../../reduxStore/changeCatogary";
 
 const AddTodo = () => {
   const dispatch = useDispatch();
@@ -56,11 +57,23 @@ const AddTodo = () => {
   };
   const todoDataSaveHandler = async () => {
     console.log(todoData);
+    dispatch(addTodoFlash(false));
+    const toastId = toast.loading("Creating...");
     try {
       const res = await axios.post("/api/createPost", todoData);
-      console.log(res.data);
+      console.log(res);
+      toast.success(res.data.msg, {
+        id: toastId,
+      });
+      dispatch(increaseVal());
+      setTimeout(() => {
+        dispatch(increaseVal());
+      }, 10);
     } catch (error) {
       console.log(error);
+      toast.error(error.code, {
+        id: toastId,
+      });
     }
   };
   const addNewCheckList = () => {
@@ -123,44 +136,49 @@ const AddTodo = () => {
                 )}
               </div>
             </div>
-            <div style={{display: "flex", flexDirection: "column"}}>
+            <div className={style.checklistMainContainer}>
               <div className={style.titleSection}>
-                <div>Checklist (1/3)</div> <FaStarOfLife className={style.starIcon} />
+                <div>
+                  Checklist ({Checklist.filter((item) => item.isCompleted).length}/{Checklist.length})
+                </div>
+                <FaStarOfLife className={style.starIcon} />
               </div>
-              {Checklist.map((item, i) => {
-                return (
-                  <div key={i} style={{display: "flex"}} className={style.checklistContainer}>
-                    <input
-                      className={style.todoCheckBox}
-                      type="checkbox"
-                      checked={item.isCompleted}
-                      onChange={() => {
-                        const newChecklist = [...Checklist];
-                        newChecklist[i].isCompleted = !newChecklist[i].isCompleted;
-                        setTodoData({...todoData, Checklist: newChecklist});
-                      }}
-                    />
-                    <input
-                      className={style.todoInput}
-                      type="text"
-                      autoFocus
-                      value={item.todoContent}
-                      onChange={(e) => {
-                        const newChecklist = [...Checklist];
-                        newChecklist[i].todoContent = e.target.value;
-                        setTodoData({...todoData, Checklist: newChecklist});
-                      }}
-                      placeholder="Type..."
-                      name=""
-                      id=""
-                    />
-                    <MdDelete onClick={() => deleteCheckList(i)} className={style.todoDeleteIcon} />
-                  </div>
-                );
-              })}
-              <div onClick={addNewCheckList} className={style.addNewSection}>
-                <IoAddOutline />
-                Add New
+              <div className={style.checklistBoxContainer}>
+                {Checklist.map((item, i) => {
+                  return (
+                    <div key={i} style={{display: "flex"}} className={style.checklistContainer}>
+                      <input
+                        className={style.todoCheckBox}
+                        type="checkbox"
+                        checked={item.isCompleted}
+                        onChange={() => {
+                          const newChecklist = [...Checklist];
+                          newChecklist[i].isCompleted = !newChecklist[i].isCompleted;
+                          setTodoData({...todoData, Checklist: newChecklist});
+                        }}
+                      />
+                      <input
+                        className={style.todoInput}
+                        type="text"
+                        autoFocus
+                        value={item.todoContent}
+                        onChange={(e) => {
+                          const newChecklist = [...Checklist];
+                          newChecklist[i].todoContent = e.target.value;
+                          setTodoData({...todoData, Checklist: newChecklist});
+                        }}
+                        placeholder="Type..."
+                        name=""
+                        id=""
+                      />
+                      <MdDelete onClick={() => deleteCheckList(i)} className={style.todoDeleteIcon} />
+                    </div>
+                  );
+                })}
+                <div onClick={addNewCheckList} className={style.addNewSection}>
+                  <IoAddOutline />
+                  Add New
+                </div>
               </div>
             </div>
             <div className={style.bothButton}>

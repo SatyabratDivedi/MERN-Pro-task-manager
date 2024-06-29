@@ -7,18 +7,15 @@ const postSchema = new mongoose.Schema({
   },
   title: {
     type: String,
-    required: true,
   },
   catogary: {
     type: String,
   },
   priority: {
     type: String,
-    required: true,
   },
   assignTo: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "assignUser",
+    type:String,
   },
   todosList: [
     {
@@ -29,7 +26,7 @@ const postSchema = new mongoose.Schema({
   date: {
     type: String,
   },
-});
+}, { timestamps: true });
 
 const postModel = mongoose.model("post", postSchema);
 module.exports = postModel;

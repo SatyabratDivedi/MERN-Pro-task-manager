@@ -4,44 +4,57 @@ const bcrypt = require("bcrypt");
 const userModel = require("../models/userSchema");
 const assignUserModel = require("../models/assignUserSchema");
 var jwt = require("jsonwebtoken");
-const postModel = require("../models/postSchema");
 
 route.post("/sign-up", async (req, res) => {
   const {name, email, password} = req.body;
   const isExist = await userModel.findOne({email});
-  if (!name || !email || !password) {
-    console.log("sare details important hai");
-    return res.status(400).json({msg: "fill all the details"});
+  try {
+    if (!name || !email || !password) {
+      return res.status(400).json({msg: "fill all the details"});
+    }
+    if (isExist && isExist.password) {
+      return res.status(409).json({msg: "user email already exist"});
+    }
+    if (isExist && isExist.password == "") {
+      bcrypt.hash(password, 10, async (err, hash) => {
+        isExist.name = name;
+        isExist.password = hash;
+        await isExist.save();
+      });
+      console.log("new user save jo assing tha phle se huaa");
+      return res.status(200).json({msg: "user account created"});
+    }
+    bcrypt.hash(password, 10, async (err, hash) => {
+      await userModel({name, email, password: hash}).save();
+      console.log("new user save huaa");
+      return res.status(200).json({msg: "user account created"});
+    });
+  } catch (error) {
+    return res.status(404).send({msg: "something went wrong"});
   }
-  if (isExist) {
-    console.log("ye user phle se hi data me hai");
-    return res.status(409).json({msg: "user email already exist"});
-  }
-  bcrypt.hash(password, 10, async (err, hash) => {
-    const username = name + Math.floor(Math.random() * 1000).toString();
-    await userModel({name, username, email, password: hash}).save();
-    console.log("new user save huaa");
-    return res.status(200).json({msg: "user account created"});
-  });
 });
 route.post("/sign-in", async (req, res) => {
   const {email, password} = req.body;
   const isExist = await userModel.findOne({email});
-  if (!isExist) {
-    console.log("this user is not avalable");
-    return res.status(404).json({msg: "invlaid access"});
-  }
-  bcrypt.compare(password, isExist.password, (err, result) => {
-    if (result) {
-      console.log("user login ho gya");
-      var token = jwt.sign({user: isExist}, "shhh");
-      console.log(token);
-      res.cookie("user_token", token).status(202).json({msg: "login successfully", user: isExist});
-    } else {
-      console.log("password galat hai bhai");
+  try {
+    if (!isExist) {
+      console.log("this user is not avalable");
       return res.status(404).json({msg: "invlaid access"});
     }
-  });
+    bcrypt.compare(password, isExist.password, (err, result) => {
+      if (result) {
+        console.log("user login ho gya");
+        var token = jwt.sign({user: isExist}, "shhh");
+        console.log(token);
+        res.cookie("user_token", token).status(202).json({msg: "login successfully", user: isExist});
+      } else {
+        console.log("password galat hai bhai");
+        return res.status(404).json({msg: "invlaid access"});
+      }
+    });
+  } catch (error) {
+    return res.status(404).send({msg: "something went wrong"});
+  }
 });
 
 route.post("/addAssignUser", authCheck, async (req, res) => {
@@ -56,8 +69,11 @@ route.post("/addAssignUser", authCheck, async (req, res) => {
       console.log("user already assign hai");
       return res.status(409).json({msg: "this user has already assign by you"});
     }
+    // const assignUserInMainUser = await userModel.findOne(email)
     const assignNewUser = await assignUserModel({email}).save();
     await userModel.findByIdAndUpdate(whoAssigned._id, {$push: {assignedUsers: assignNewUser._id}}, {new: true});
+    const newUserThoughAssign = await userModel({name: "", username: "", email, password: ""}).save();
+    console.log("newUserThoughAssign: ", newUserThoughAssign);
     console.log("new user assign huaa");
     return res.status(200).json({msg: "assign user created successfully"});
   } catch (error) {

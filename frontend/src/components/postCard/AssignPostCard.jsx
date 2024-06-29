@@ -9,11 +9,9 @@ import {deleteTodoFlash, updateTodoFlash} from "../../reduxStore/FlashSlice";
 import Skeleton from "react-loading-skeleton";
 import axios from "axios";
 import {increaseVal} from "../../reduxStore/changeCatogary";
-import {format} from "date-fns";
-import toast from "react-hot-toast";
 
-const PostCard = ({collapse, catogary, post, loginUser}) => {
-  console.log(post);
+const AssignPostCard = ({collapse, catogary, post , changePostPlace, setChangePostPlace}) => {
+  console.log(post)
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [threeDotOpen, setThreeDotOpen] = useState(false);
@@ -23,108 +21,55 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   }, [collapse]);
 
   const editTodoHandler = (postId) => {
-    dispatch(updateTodoFlash({display: true, postId}));
+    dispatch(updateTodoFlash({display:true, postId}))
     setThreeDotOpen(false);
   };
 
   const shareTodoHandler = () => {
+    console.log("share");
     setThreeDotOpen(false);
   };
   const deleteTodoHandler = (postId) => {
-    setThreeDotOpen(false);
-    dispatch(deleteTodoFlash({display: true, postId}));
+    dispatch(deleteTodoFlash({display:true, postId}));
   };
 
   const updatePostCatogaryHandler = async (postId, catogary) => {
-    const toastId = toast.loading("Please wait...");
     try {
       const res = await axios.put(`/api/updatePostCatogary/`, {postId, catogary});
       console.log(res);
-      if (res.status == 200) {
-        toast.success(res.data.msg, {
-          id: toastId,
-        });
-        dispatch(increaseVal());
-        setTimeout(() => {
-          dispatch(increaseVal());
-        }, 10);
-      }
     } catch (error) {
-      console.log(error);
-      console.log(error.response.data.msg);
-      toast.error(error.response.data.msg, {
-        id: toastId,
-      });
-      dispatch(increaseVal());
-      setTimeout(() => {
-        dispatch(increaseVal());
-      }, 10);
+      console.error("Failed to update post category:", error);
     }
   };
-
-  const formatDate = (dateString) => {
-    if (dateString == "") return "";
-    const [day, month, year] = dateString.split("/");
-    const date = new Date(year, month - 1, day);
-    const currentDate = new Date();
-    const isOlder = date < currentDate;
-    const formattedDate = format(date, "MMM do");
-    const color = isOlder ? "#CF3636" : "#DBDBDB";
-
-    return {formattedDate, color};
-  };
-
-  const checkBoxHandler = async (todo, post) => {
-    const toastId = toast.loading("Please wait...");
-    try {
-      const res = await axios.put(`/api/updateCheckList`, {todo, post});
-      console.log(res);
-      if (res.status == 200) {
-        dispatch(increaseVal());
-        toast.success(res.data, {
-          id: toastId,
-        });
-      }
-    } catch (error) {
-      toast.error(error.response.data.msg, {
-        id: toastId,
-      });
-      dispatch(increaseVal());
-      setTimeout(() => {
-        dispatch(increaseVal());
-      }, 10);
-    }
-  };
-
   return (
     <div className={style.mainBox}>
       <div className={style.prioritySection}>
         <div className={style.priorityChild}>
           <div style={{background: post.priority === "HIGH PRIORITY" ? "#FF2473" : post.priority == "MODERATE PRIORITY" ? "#18B0FF" : "#63C05B"}} className={style.Circle}></div>
           <div>{post.priority}</div>
-          <div style={{visibility: post?.assignTo == null || loginUser?.email === post?.assignTo ? "hidden" : "visible"}} className={style.nameCircle}>
-            {post?.assignTo && (post.assignTo[1] === "@" || post.assignTo[1] === "." ? post.assignTo[0].toUpperCase() : post.assignTo.slice(0, 2).toUpperCase())}
+          <div style={{visibility: !post.assignTo ? "hidden" : "visible"}} className={style.nameCircle}>
+            {post.assignTo?.email[1] === "@" || post.assignTo?.email[1] === "." ? post.assignTo?.email[0].toUpperCase() : post.assignTo?.email.slice(0, 2).toUpperCase()}
           </div>
           <div className={style.assignEmail}>
-            <div>{post?.assignTo}</div>
+            <div>{post.assignTo?.email}</div>
           </div>
         </div>
         <div>
           <BsThreeDots onClick={() => setThreeDotOpen(!threeDotOpen)} className={style.threeDot} />
           <div style={{display: threeDotOpen ? "flex" : "none"}} className={style.threeDotElement}>
-            <div onClick={() => editTodoHandler(post._id)} className={style.DotElement}>
+            <div onClick={()=>editTodoHandler(post._id)} className={style.DotElement}>
               Edit
             </div>
             <div onClick={shareTodoHandler} className={style.DotElement}>
               Share
             </div>
-            <div onClick={() => deleteTodoHandler(post._id)} className={style.DotElement}>
+            <div onClick={()=>deleteTodoHandler(post._id)} className={style.DotElement}>
               Delete
             </div>
           </div>
         </div>
       </div>
-      <div className={style.hero}>{post.title || <Skeleton width={"50px"} />}</div>
+      <div className={style.hero}>{post.title || <Skeleton width={'50px'}  />}</div>
       <div className={style.checklist}>
         <div>
           Checklist ({post?.todosList.filter((todo) => todo.isCompleted).length}/{post?.todosList?.length})
@@ -137,21 +82,23 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
         {post.todosList.map((list, i) => {
           return (
             <div key={i} className={style.todoBox}>
-              <input onChange={() => checkBoxHandler(list, post)} checked={list.isCompleted} type="checkbox" style={{cursor: "pointer"}} name="" id="" />
+              <input className={style.checkBox} checked={list.isCompleted} type="checkbox" name="" id="" />
               <div className={style.todoContent}>{list.todoContent}</div>
             </div>
           );
         })}
       </div>
       <div className={style.footer}>
-        <div style={{color: formatDate(post?.date).color === "#CF3636" ? "white" : "black", background: catogary === "Done" ? "#63C05B" : formatDate(post?.date).color, visibility: post.date == "" ? "hidden" : "visible", cursor: "text"}} className={style.footerbox}>
-          {formatDate(post?.date).formattedDate}
+        <div style={{color: "white", background: catogary === "Done" ? "#63C05B" : "#CF3636"}} className={style.footerbox}>
+          Feb 10th
         </div>
         <div className={style.catogaryList}>
           {post?.catogary !== "BACKLOG" && (
             <div
               onClick={() => {
                 updatePostCatogaryHandler(post?._id, "BACKLOG");
+                setChangePostPlace(!changePostPlace);
+                dispatch(increaseVal());
               }}
               className={style.footerbox}
             >
@@ -162,6 +109,8 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
             <div
               onClick={() => {
                 updatePostCatogaryHandler(post?._id, "TODO");
+                setChangePostPlace(!changePostPlace);
+                dispatch(increaseVal());
               }}
               className={style.footerbox}
             >
@@ -172,6 +121,8 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
             <div
               onClick={() => {
                 updatePostCatogaryHandler(post?._id, "PROGRESS");
+                setChangePostPlace(!changePostPlace);
+                dispatch(increaseVal());
               }}
               className={style.footerbox}
             >
@@ -182,6 +133,8 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
             <div
               onClick={() => {
                 updatePostCatogaryHandler(post?._id, "DONE");
+                setChangePostPlace(!changePostPlace);
+                dispatch(increaseVal());
               }}
               className={style.footerbox}
             >
@@ -194,12 +147,9 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   );
 };
 
-PostCard.propTypes = {
+AssignPostCard.propTypes = {
   collapse: PropTypes.bool,
   catogary: PropTypes.string,
   post: PropTypes.object,
-  loginUser: PropTypes.object,
-  changePostPlace: PropTypes.func,
-  setChangePostPlace: PropTypes.func,
 };
-export default PostCard;
+export default AssignPostCard;

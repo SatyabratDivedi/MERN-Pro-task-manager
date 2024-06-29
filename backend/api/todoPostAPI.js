@@ -1,57 +1,194 @@
 const express = require("express");
 const route2 = express();
-const bcrypt = require("bcrypt");
+// const authCheck = require("../middleware/authCheck");
 const userModel = require("../models/userSchema");
 const postModel = require("../models/postSchema");
 const assignUserModel = require("../models/assignUserSchema");
 var jwt = require("jsonwebtoken");
 
 route2.post("/createPost", authCheck, async (req, res) => {
-  const {title, catogary, priority, assignTo, Checklist, date} = req.body;
-  const findUser = await userModel.findOne({email: req.user.email});
-  const findAssignUser = await assignUserModel.findOne({email: assignTo});
+  try {
+    const {title, catogary, priority, assignTo, Checklist, date} = req.body;
+    const findUser = await userModel.findOne({email: req.user.email});
+    const findAssignUser = await assignUserModel.findOne({email: assignTo});
+    const findAssignUserInMainUser = await userModel.findOne({email: assignTo});
+    const newPost = await new postModel({
+      user: findUser._id,
+      title,
+      catogary,
+      assignTo: findAssignUser && assignTo,
+      priority,
+      todosList: Checklist,
+      date,
+    }).save();
 
-  const newPost = await new postModel({
-    user: findUser._id,
-    title,
-    catogary,
-    assignTo: findAssignUser && findAssignUser._id,
-    priority,
-    todosList: Checklist,
-    date,
-  }).save();
-  findAssignUser?.posts.push(newPost._id);
-  await findAssignUser?.save();
-  findUser.posts.push(newPost._id);
-  await findUser.save();
-  const updatedUser = await userModel.findById(findUser._id).populate("posts");
-  console.log("updatedUser: ", updatedUser);
-  return res.status(200).json({msg: "post created successfully"});
+    if (findAssignUser) {
+      findAssignUser.posts.push(newPost._id);
+      await findAssignUser.save();
+      findAssignUserInMainUser.posts.push(newPost._id);
+      await findAssignUserInMainUser.save();
+    }
+    findUser.posts.push(newPost._id);
+    await findUser.save();
+    const updatedUser = await userModel.findById(findUser._id).populate("posts");
+    console.log("updatedUser: ", updatedUser);
+    return res.status(200).json({msg: "post created successfully"});
+  } catch (error) {
+    return res.status(404).send({msg: "something went wrong"});
+  }
 });
 
 route2.get("/get_all_posts", authCheck, async (req, res) => {
-  const findLoginUser = await userModel.findById(req.user._id);
-  const allPostsAndAssignUsres = await postModel.find({user: findLoginUser._id}).populate("assignTo");
-  console.log("allPostsAndAssignUsres: ", allPostsAndAssignUsres);
-  const todoPosts = allPostsAndAssignUsres.filter((post) => post.catogary == "TODO");
-  console.log("todoPosts: ", todoPosts);
-  const backlogPosts = allPostsAndAssignUsres.filter((post) => post.catogary == "BACKLOG");
-  console.log("backlogPosts: ", backlogPosts);
-  const inProcessPosts = allPostsAndAssignUsres.filter((post) => post.catogary == "PROGRESS");
-  console.log("inProcessPosts: ", inProcessPosts);
-  const donePosts = allPostsAndAssignUsres.filter((post) => post.catogary == "DONE");
-  console.log("donePosts: ", donePosts);
-  return res.status(200).json({TODO: todoPosts, BACKLOG: backlogPosts, INPROCESS: inProcessPosts, DONE: donePosts});
+  try {
+    const findLoginUser = await userModel.findById(req.user._id).populate("posts");
+    const allPostsAndAssignUsres = [...findLoginUser.posts];
+    const todoPosts = allPostsAndAssignUsres.filter((post) => post.catogary == "TODO");
+    const backlogPosts = allPostsAndAssignUsres.filter((post) => post.catogary == "BACKLOG");
+    const inProcessPosts = allPostsAndAssignUsres.filter((post) => post.catogary == "PROGRESS");
+    const donePosts = allPostsAndAssignUsres.filter((post) => post.catogary == "DONE");
+    const lowPriorityPosts = allPostsAndAssignUsres.filter((post) => post.priority == "LOW PRIORITY");
+    const moderatePriorityPosts = allPostsAndAssignUsres.filter((post) => post.priority == "MODERATE PRIORITY");
+    const highPriorityPosts = allPostsAndAssignUsres.filter((post) => post.priority == "HIGH PRIORITY");
+    return res.status(200).json({
+      ALLPOSTS: allPostsAndAssignUsres,
+      TODO: todoPosts,
+      BACKLOG: backlogPosts,
+      INPROCESS: inProcessPosts,
+      DONE: donePosts,
+      LOWPRIORITY: lowPriorityPosts,
+      MODERATEPRIORITY: moderatePriorityPosts,
+      HIGHPRIORITY: highPriorityPosts,
+    });
+  } catch (error) {
+    return res.status(404).send({msg: "something went wrong"});
+  }
 });
 
 route2.put("/updatePostCatogary", authCheck, async (req, res) => {
   try {
     const {postId, catogary} = req.body;
     const findPost = await postModel.findById(postId);
+    if (!findPost) {
+      return res.status(404).json({msg: "Post not found"});
+    }
     findPost.catogary = catogary;
-    const updatedPost = await findPost.save();
-    console.log("updatedPost: ", updatedPost);
-    return res.status(200).json({msg: "post catogary updated successfully"});
+    await findPost.save();
+    return res.status(200).json({msg: "post category updated"});
+  } catch (error) {
+    return res.status(404).json({msg: "something went wrong"});
+  }
+});
+
+route2.put("/updatePost/:postId", authCheck, async (req, res) => {
+  const postId = req.params.postId;
+  try {
+    const {title, priority, assignTo, Checklist, date} = req.body;
+    const findPost = await postModel.findById(postId);
+    if (!findPost) {
+      return res.status(404).json({msg: "Post not found"});
+    }
+    const oldAssighUser = await assignUserModel.findOne({email: findPost.assignTo});
+    const newAssignUser = await assignUserModel.findOne({email: assignTo});
+    const oldAssighUserMainAcc = await userModel.findOne({email: findPost.assignTo});
+    const newAssignUserMainAcc = await userModel.findOne({email: assignTo});
+    if (!oldAssighUser && !newAssignUser) {
+      console.log("phle bhi nalla tha abhi bhi nalla hai");
+    } else if (!oldAssighUser && newAssignUser) {
+      newAssignUser.posts.push(findPost._id);
+      await newAssignUser.save();
+      findPost.assignTo = newAssignUser.email;
+      await findPost.save();
+      newAssignUserMainAcc.posts.push(findPost._id);
+      await newAssignUserMainAcc.save();
+      console.log("purana user nahi tha aur nya user assign huaa hai");
+    } else if (oldAssighUser && newAssignUser) {
+      if (oldAssighUser.email != newAssignUser.email) {
+        oldAssighUser.posts = oldAssighUser.posts.filter((post) => post._id.toString() != findPost._id.toString());
+        await oldAssighUser.save();
+        newAssignUser.posts.push(findPost._id);
+        await newAssignUser.save();
+        findPost.assignTo = newAssignUser.email;
+        await findPost.save();
+        oldAssighUserMainAcc.posts = oldAssighUserMainAcc.posts.filter((post) => post._id.toString() != findPost._id.toString());
+        await oldAssighUserMainAcc.save();
+        newAssignUserMainAcc.posts.push(findPost._id);
+        await newAssignUserMainAcc.save();
+        console.log(" old user remove and new user assign");
+      } else {
+        findPost.assignTo = newAssignUser.email;
+        console.log("old user hi assign");
+      }
+    }
+    findPost.title = title;
+    findPost.priority = priority;
+    findPost.todosList = Checklist;
+    findPost.date = date;
+    const updatePost = await findPost.save();
+    console.log("updatePost: ", updatePost);
+    return res.status(200).json({msg: "post updated successfully"});
+  } catch (error) {
+    return res.status(404).json({msg: "something went wrong"});
+  }
+});
+
+route2.put("/updateCheckList/", authCheck, async (req, res) => {
+  const {todo, post} = req.body;
+  try {
+    const findPost = await postModel.findById(post._id);
+    if (!findPost || !todo || !post) {
+      return res.status(404).json({msg: "Post not found"});
+    }
+    console.log("findPost: ", findPost);
+    const findTodo = findPost.todosList.find((item) => item._id.toString() == todo._id.toString());
+    console.log(findTodo);
+    if (findTodo) {
+      const todoUpdate = await postModel.findByIdAndUpdate(
+        post._id,
+        {$set: {"todosList.$[todoItem].isCompleted": !findTodo.isCompleted}},
+        {
+          arrayFilters: [{"todoItem._id": todo._id}],
+          new: true,
+        }
+      );
+      res.status(200).send("checklist update");
+    } else {
+      res.status(404).send("Todo not found");
+    }
+  } catch (error) {
+    console.error("Error updating todo: ", error);
+    res.status(500).send({msg: "Error updating todo"});
+  }
+});
+
+route2.delete("/deletePost/:postId", authCheck, async (req, res) => {
+  const postId = req.params.postId;
+  const loginUserEmail = req.user.email;
+  const findPostForDelete = await postModel.findById(postId);
+  try {
+    if (!findPostForDelete) {
+      return res.status(404).json({msg: "Post not found"});
+    }
+    if (loginUserEmail == findPostForDelete.assignTo) {
+      return res.status(404).json({msg: "Only admin can delete this post!"});
+    }
+    await postModel.findByIdAndDelete(postId);
+    const loginUser = await userModel.findOne({email: loginUserEmail});
+    if (loginUser) {
+      loginUser.posts = loginUser.posts.filter((post) => post._id.toString() !== postId);
+      await loginUser.save();
+    }
+    const assignUser = await userModel.findOne({email: findPostForDelete.assignTo});
+    if (assignUser) {
+      assignUser.posts = assignUser.posts.filter((post) => post._id.toString() !== postId);
+      await assignUser.save();
+    }
+    const findUserInAssing = await assignUserModel.findOne({email: findPostForDelete.assignTo});
+    if (assignUser) {
+      findUserInAssing.posts = findUserInAssing.posts.filter((post) => post._id.toString() != postId);
+      await findUserInAssing.save();
+    }
+    console.log("delete ho gya");
+    return res.status(200).json({msg: "post deleted successfully"});
   } catch (error) {
     return res.status(404).json({msg: "something went wrong"});
   }

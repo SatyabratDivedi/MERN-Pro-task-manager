@@ -156,3 +156,6 @@
   background-color: #eeecec;
   cursor: pointer;
 }
+.footerbox:hover {
+  background-color: #dedede;
+}

@@ -28,7 +28,7 @@ const SettingPage = () => {
     if (e.target.name === "newPassword") {
       e.target.value == "" ? setShowPassword2(false) : setShowPassword2(true);
     }
-  }; 
+  };
   const {name, email, oldPassword, newPassword} = user;
 
   const fetchLoginUser = async () => {

@@ -20,7 +20,8 @@ const MainDashboard = () => {
   const changeCatogary = useSelector((state) => state.changeCatogaryReducer.value);
   console.log("changeCatogary: ", changeCatogary);
   const [allPosts, setAllPosts] = useState([]);
-  const [changePostPlace, setChangePostPlace] = useState(false);
+  console.log(allPosts);
+  console.log(userData?.user.email)
 
   const toggleCollapse = (item) => {
     setCollapse((prevState) => ({...prevState, [item]: !prevState[item]}));
@@ -73,19 +74,12 @@ const MainDashboard = () => {
     }
   };
   const fetchAllPosts = async () => {
-    // const toastId = toast.loading("Fetching posts...");
     try {
       const res = await axios.get("/api/get_all_posts");
       console.log(res.data);
       setAllPosts(res.data);
-      // toast.success("Catogary Arranged", {
-      //   id: toastId,
-      // });
     } catch (error) {
-      console.error(error.post, error);
-      // toast.error("Something wrong", {
-      //   id: toastId,
-      // });
+      console.log(error)
     }
   };
   useEffect(() => {
@@ -93,16 +87,21 @@ const MainDashboard = () => {
   }, []);
   useEffect(() => {
     fetchAllPosts();
-  }, [allPosts]);
+  }, [changeCatogary]);
 
-  const getCatogoriesPosts = (catogory) => {
+
+  const getCategoriesPosts = (catogory) => {
     console.log(catogory);
-    console.log(allPosts);
-    if (catogory == "To do") return allPosts?.TODO || [];
-    if (catogory == "Backlog") return allPosts?.BACKLOG || [];
-    if (catogory == "Done") return allPosts?.DONE || [];
-    if (catogory == "in Progress") return allPosts?.INPROCESS || [];
+    console.log(allPosts.ASSIGNEDPOSTS);
+    let posts = [];
+    if (catogory === "To do") posts = allPosts?.TODO || [];
+    if (catogory === "Backlog") posts = allPosts?.BACKLOG || [];
+    if (catogory === "Done") posts = allPosts?.DONE || [];
+    if (catogory === "in Progress") posts = allPosts?.INPROCESS || [];
+
+    return [...posts];
   };
+  console.log(allPosts);
 
   function formatDateSimple(date) {
     const suffixes = ["th", "st", "nd", "rd"];
@@ -151,8 +150,10 @@ const MainDashboard = () => {
                     </div>
                   </div>
                   <div style={{paddingInline: "10px"}}>
-                    {getCatogoriesPosts(catogary).map((post, i) => (
-                      <PostCard key={i} post={post} collapse={collapse[catogary]} catogary={catogary} changePostPlace={changePostPlace} setChangePostPlace={setChangePostPlace} />
+                    {getCategoriesPosts(catogary).map((post, i) => (
+                      <div key={i}>
+                        <PostCard post={post} loginUser={userData?.user} collapse={collapse[catogary]} catogary={catogary} />
+                      </div>
                     ))}
                   </div>
                 </div>

@@ -2,7 +2,7 @@
   background-color: rgba(48, 61, 67, 0.55);
   position: absolute;
   display: flex;
-  /* align-items: center; */
+  align-items: center;
   justify-content: center;
   z-index: 10000;
   width: 100vw;
@@ -12,7 +12,7 @@
 .container {
   background-color: white;
   width: 650px;
-  max-height: fit-content;
+  height: 550px;
   border-radius: 16px;
   padding: 30px;
   display: flex;
@@ -136,6 +136,15 @@
   cursor: pointer;
   font-size: 14px;
 }
+.checklistMainContainer{
+  display: flex;
+  flex-direction: column;
+}
+.checklistBoxContainer{
+  height: 210px;
+  overflow-y: scroll;
+  padding-inline: 10px;
+}
 .checklistContainer {
   display: flex;
   align-items: center;
@@ -220,4 +229,9 @@
   border-radius: 12px;
   font-family: "Poppins", sans-serif;
   font-size: 16px;
+}
+
+input[type="date"]:not(:valid)::before {
+  content: attr(data-placeholder);
+  color: #888;
 }
