@@ -64,6 +64,23 @@ route2.get("/get_all_posts", authCheck, async (req, res) => {
   }
 });
 
+route2.get("/getOnePost/:postId", async (req, res) => {
+  const postId = req.params.postId;
+  console.log("postId: ", postId);
+
+  const findPost = await postModel.findById(postId);
+  console.log("findPost: ", findPost);
+
+  try {
+    if (!findPost) {
+      return res.status(404).json({msg: "Post not found"});
+    }
+    return res.status(200).json(findPost);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 route2.put("/updatePostCatogary", authCheck, async (req, res) => {
   try {
     const {postId, catogary} = req.body;

@@ -12,6 +12,7 @@ import MainDashboard from "./components/main-dashboard/MainDashboard.jsx";
 import {store} from "./reduxStore/store.js";
 import {Provider} from "react-redux";
 import "react-loading-skeleton/dist/skeleton.css";
+import SignlePostPage from "./components/singlePostPage/SignlePostPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
         element: <SettingPage />,
       },
     ],
+  },
+  {
+    path: "/post/:postId",
+    element: <SignlePostPage />,
   },
 ]);
 

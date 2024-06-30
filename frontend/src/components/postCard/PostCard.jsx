@@ -27,8 +27,11 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
     setThreeDotOpen(false);
   };
 
-  const shareTodoHandler = () => {
+  const shareTodoHandler = (postId) => {
     setThreeDotOpen(false);
+    navigator.clipboard.writeText(`http://localhost:5173/post/${postId}`).then(() => {
+      toast.success("Copied to clipboard");
+    });
   };
   const deleteTodoHandler = (postId) => {
     setThreeDotOpen(false);
@@ -63,7 +66,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   };
 
   const formatDate = (dateString) => {
-    if (dateString == "") return "";
+    if (!dateString) return "";
     const [day, month, year] = dateString.split("/");
     const date = new Date(year, month - 1, day);
     const currentDate = new Date();
@@ -115,7 +118,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
             <div onClick={() => editTodoHandler(post._id)} className={style.DotElement}>
               Edit
             </div>
-            <div onClick={shareTodoHandler} className={style.DotElement}>
+            <div onClick={() => shareTodoHandler(post._id)} className={style.DotElement}>
               Share
             </div>
             <div onClick={() => deleteTodoHandler(post._id)} className={style.DotElement}>

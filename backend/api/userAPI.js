@@ -57,6 +57,58 @@ route.post("/sign-in", async (req, res) => {
   }
 });
 
+route.put("/updateUserDetails", authCheck, async (req, res) => {
+  const {name, email, oldPassword, newPassword} = req.body.user;
+  // console.log("name: ", name);
+  // console.log("email: ", email);
+  // console.log("oldPassword: ", oldPassword);
+  // console.log("newPassword: ", newPassword);
+  const isExist = await userModel.findById(req.user._id);
+  if (!isExist) {
+    console.log("user not found");
+    return res.status(404).json({msg: "user not found"});
+  }
+  try {
+    if (oldPassword && newPassword) {
+      bcrypt.compare(oldPassword, isExist.password, (err, result) => {
+        if (result) {
+          bcrypt.hash(newPassword, 10, async (err, hash) => {
+            if (err) {
+              console.error("Error hashing password", err);
+              return res.status(500).send({msg: "Internal server error"});
+            }
+            isExist.name = name;
+            isExist.email = email;
+            isExist.password = hash;
+            try {
+              await isExist.save();
+              console.log("Data saved successfully");
+              res.status(200).send({msg: "User updated successfully"});
+            } catch (saveError) {
+              console.error("Error saving user", saveError);
+              if (!res.headersSent) {
+                res.status(500).send({msg: "Internal server error"});
+              }
+            }
+          });
+        }
+        console.log("old password galat hai kuchh update nahi huaa");
+        res.status(404).json({msg: "old password incorrect"});
+      });
+    } else if (!oldPassword && !newPassword) {
+      isExist.name = name;
+      isExist.email = email;
+      await isExist.save();
+      console.log("naam aur email dono update huaa");
+      res.status(200).send({msg: "user updated successfully"});
+    } else if (!oldPassword && newPassword) {
+      return res.status(400).send({msg: "old password is needed for update"});
+    }
+  } catch (error) {
+    return res.status(404).send({msg: "something went wrong"});
+  }
+});
+
 route.post("/addAssignUser", authCheck, async (req, res) => {
   const {email} = req.body;
   try {

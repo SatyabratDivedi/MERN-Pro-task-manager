@@ -1,0 +1,165 @@
+.mainContainer{
+  max-height: 100vh;
+}
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 50px;
+}
+.headerIcon {
+  font-size: 40px;
+}
+.headerTxt {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: "Poppins";
+}
+.mainContainer2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.heroContainer {
+  width: 30%;
+  border: 2px solid #edf5fe;
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 20px;
+  font-family: "Poppins";
+  transition: all .5s;
+}
+.prioritySection {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.priorityCircle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.priorityTxt {
+  font-size: 10px;
+  font-weight: 500;
+  font-family: "Poppins";
+  color: #707070;
+}
+.title {
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Poppins";
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  min-width: fit-content;
+  margin-bottom: 10px;
+}
+.checklistMainContainer {
+  display: flex;
+  flex-direction: column;
+}
+.checklistBoxContainer {
+  max-height: 40vh;
+  overflow-y: auto;
+  padding-inline: 10px;
+}
+.checklistContainer {
+  display: flex;
+  align-items: center;
+}
+.checklistContainer {
+  position: relative;
+  width: 100%;
+  border: 1.4px solid rgb(224, 224, 224);
+  box-shadow: 0 1.4px 2px rgba(0, 0, 0, 0.1);
+  padding: 8px 30px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+.todoCheckBox {
+  position: absolute;
+  left: 10px;
+}
+.todoInput {
+  width: 100%;
+  text-align: start;
+  text-overflow: clip;
+  font-size: 15px;
+  border: none;
+  outline: none;
+  font-family: "Inter", sans-serif;
+}
+.footerDateSection{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Poppins";
+  margin-left: 13px;
+  margin-top: 20px;
+}
+.footerbox {
+  font-size: 10px;
+  max-width: fit-content;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background-color: #eeecec;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1200px) {
+  .heroContainer {
+    width: 35%;
+
+  }
+}
+@media screen and (max-width: 1100px) {
+  .heroContainer {
+    width: 38%;
+
+  }
+}
+@media screen and (max-width: 1000px) {
+  .heroContainer {
+    width: 45%;
+
+  }
+}
+@media screen and (max-width: 850px) {
+  .heroContainer {
+    width: 65%;
+    padding: 30px;
+  }
+  .headerIcon {
+    font-size: 30px;
+  }
+  .headerTxt {
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 660px) {
+  .heroContainer {
+    width: 85%;
+    padding: 20px;
+  }
+  .headerIcon {
+    font-size: 25px;
+  }
+  .headerTxt {
+    font-size: 15px;
+  }
+  .header {
+    padding: 30px 35px;
+    gap: 10px;
+  }
+}
