@@ -13,13 +13,10 @@ const SettingPage = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-  const formData = {
-    name: "",
-    email: "",
-    oldPassword: "",
-    newPassword: "",
-  };
-  const [user, setUser] = useState({formData});
+
+  const [user, setUser] = useState({});
+  const {name, email, oldPassword, newPassword} = user;
+
   const editHandle = (e) => {
     setUser({...user, [e.target.name]: e.target.value});
     if (e.target.name === "oldPassword") {
@@ -29,23 +26,35 @@ const SettingPage = () => {
       e.target.value == "" ? setShowPassword2(false) : setShowPassword2(true);
     }
   };
-  const {name, email, oldPassword, newPassword} = user;
 
   const fetchLoginUser = async () => {
     try {
       const res = await axios.get("/api/getLoginUserDetails");
       console.log(res.data.user);
-      const updateUserInfo = (name, email) => {
-        setUser((prevState) => ({...prevState, name, email}));
-      };
-      updateUserInfo(res.data.user?.name, res.data.user?.email);
+      if (res?.data?.user) {
+        const {name, email} = res.data.user;
+        setUser({
+          name: name || "",
+          email: email || "",
+        });
+      }
     } catch (error) {
       if (error.response.data.msg == "unauthorized! please login first") {
         toast.error(error.response.data.msg);
         navigate("/login");
+        toast.error(error.code);
         return;
       }
-      toast.error(error.code);
+    }
+  };
+
+  const updateDetailsHandler = async () => {
+    console.log(user);
+    try {
+      const res = await axios.put("/api/updateUserDetails", {user});
+      console.log(res);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -88,7 +97,9 @@ const SettingPage = () => {
               {showPassword2 ? <LuEyeOff /> : <FiEye />}
             </div>
           </div>
-          <button className={style.updateBtn}>Update</button>
+          <button onClick={updateDetailsHandler} className={style.updateBtn}>
+            Update
+          </button>
         </div>
       </div>
     </>
