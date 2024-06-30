@@ -7,7 +7,6 @@ import {CiMail, CiLock} from "react-icons/ci";
 import axios from "axios";
 import toast from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
 
 const SettingPage = () => {
   const navigate = useNavigate();
@@ -50,11 +49,18 @@ const SettingPage = () => {
 
   const updateDetailsHandler = async () => {
     console.log(user);
+    const tosdtId = toast.loading("Please wait...");
     try {
       const res = await axios.put("/api/updateUserDetails", {user});
       console.log(res);
+      toast.success(res.data.msg, {
+        id: tosdtId,
+      });
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.msg, {
+        id: tosdtId,
+      });
     }
   };
 
@@ -70,13 +76,13 @@ const SettingPage = () => {
           <div className={style.box}>
             <div className={style.imgInpArea}>
               <IoPersonOutline className={style.icon} />
-              <input className={style.input} type="text" name="name" placeholder="Name" value={name} onChange={editHandle} />
+              <input className={style.input} type="text" name="name" placeholder="Name" value={name || "Loading..."} onChange={editHandle} />
             </div>
           </div>
           <div className={style.box}>
             <div className={style.imgInpArea}>
               <CiMail className={style.icon} />
-              <input className={style.input} type="email" name="email" placeholder="Email" value={email} onChange={editHandle} />
+              <input className={style.input} type="email" name="email" placeholder="Email" value={email || "Loading..."} onChange={editHandle} />
             </div>
           </div>
           <div className={style.box}>

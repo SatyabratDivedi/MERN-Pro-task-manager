@@ -59,19 +59,22 @@ route.post("/sign-in", async (req, res) => {
 
 route.put("/updateUserDetails", authCheck, async (req, res) => {
   const {name, email, oldPassword, newPassword} = req.body.user;
-  // console.log("name: ", name);
-  // console.log("email: ", email);
-  // console.log("oldPassword: ", oldPassword);
-  // console.log("newPassword: ", newPassword);
   const isExist = await userModel.findById(req.user._id);
   if (!isExist) {
     console.log("user not found");
     return res.status(404).json({msg: "user not found"});
   }
+  if (isExist.name == name && isExist.email == email && !oldPassword && !newPassword) {
+    console.log("no any changes");
+    return res.status(400).json({msg: "no any changes"});
+  }
   try {
-    if (oldPassword && newPassword) {
+    if (oldPassword) {
       bcrypt.compare(oldPassword, isExist.password, (err, result) => {
         if (result) {
+          if (!newPassword) {
+            return res.status(500).send({msg: "you need to provide new password also"});
+          }
           bcrypt.hash(newPassword, 10, async (err, hash) => {
             if (err) {
               console.error("Error hashing password", err);
@@ -91,9 +94,10 @@ route.put("/updateUserDetails", authCheck, async (req, res) => {
               }
             }
           });
+        } else {
+          console.log("old password galat hai kuchh update nahi huaa");
+          res.status(404).json({msg: "old password incorrect"});
         }
-        console.log("old password galat hai kuchh update nahi huaa");
-        res.status(404).json({msg: "old password incorrect"});
       });
     } else if (!oldPassword && !newPassword) {
       isExist.name = name;

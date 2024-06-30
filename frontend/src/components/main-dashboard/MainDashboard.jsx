@@ -10,18 +10,19 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
 import Skeleton from "react-loading-skeleton";
+import SkeletonLoader from "./../SkeletonLoader.jsx";
 
 const MainDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [collapse, setCollapse] = useState({});
   const [userData, setUserData] = useState();
-  const isLogin = useSelector((state) => state.loginReducer.isLoginState);
+  const [loader, setLoader] = useState(true);
   const changeCatogary = useSelector((state) => state.changeCatogaryReducer.value);
   console.log("changeCatogary: ", changeCatogary);
   const [allPosts, setAllPosts] = useState([]);
   console.log(allPosts);
-  console.log(userData?.user.email)
+  console.log(userData?.user.email);
 
   const toggleCollapse = (item) => {
     setCollapse((prevState) => ({...prevState, [item]: !prevState[item]}));
@@ -78,8 +79,9 @@ const MainDashboard = () => {
       const res = await axios.get("/api/get_all_posts");
       console.log(res.data);
       setAllPosts(res.data);
+      setLoader(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -88,7 +90,6 @@ const MainDashboard = () => {
   useEffect(() => {
     fetchAllPosts();
   }, [changeCatogary]);
-
 
   const getCategoriesPosts = (catogory) => {
     console.log(catogory);
@@ -150,11 +151,19 @@ const MainDashboard = () => {
                     </div>
                   </div>
                   <div style={{paddingInline: "10px"}}>
-                    {getCategoriesPosts(catogary).map((post, i) => (
-                      <div key={i}>
-                        <PostCard post={post} loginUser={userData?.user} collapse={collapse[catogary]} catogary={catogary} />
+                    {loader ? (
+                      <div >
+                        <SkeletonLoader />
+                        <SkeletonLoader />
                       </div>
-                    ))}
+                    ) : (
+                      getCategoriesPosts(catogary).map((post, i) => (
+                        <div key={i}>
+                          <PostCard post={post} loginUser={userData?.user} collapse={collapse[catogary]} catogary={catogary} />
+                        </div>
+                      ))
+                    )
+                    }
                   </div>
                 </div>
               ))}
