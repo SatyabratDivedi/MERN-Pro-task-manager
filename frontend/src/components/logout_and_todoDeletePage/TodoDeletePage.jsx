@@ -18,8 +18,7 @@ const TodoDeletePage = ({postId}) => {
     const toastId = toast.loading("Please wait...");
     try {
       const res = await axios.delete(`/api/deletePost/${postId}`);
-      console.log(res);
-      toast.success(" post deleted", {
+      toast.success(res.data.msg, {
         id: toastId,
       });
       dispatch(increaseVal());
@@ -27,7 +26,6 @@ const TodoDeletePage = ({postId}) => {
         dispatch(increaseVal());
       }, 10);
     } catch (error) {
-      console.log(error.response.data.msg);
       toast.error(error.response.data.msg, {
         id: toastId,
       });

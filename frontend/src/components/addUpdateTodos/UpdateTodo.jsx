@@ -1,6 +1,6 @@
 import {useDispatch} from "react-redux";
 import style from "./todos.module.css";
-import {addTodoFlash, updateTodoFlash} from "../../reduxStore/FlashSlice";
+import { updateTodoFlash} from "../../reduxStore/FlashSlice";
 import {FaStarOfLife} from "react-icons/fa6";
 import {useEffect, useState} from "react";
 import {FaAngleDown} from "react-icons/fa6";
@@ -30,7 +30,6 @@ const AddTodo = ({postId}) => {
   const fetchLoginUser = async () => {
     try {
       const res = await axios.get("/api/getLoginUserDetails");
-      console.log(res.data.user);
       setLoginUserData(res.data.user);
     } catch (error) {
       toast.error(error.code);
@@ -46,7 +45,6 @@ const AddTodo = ({postId}) => {
       try {
         const res = await axios.get("/api/get_all_posts");
         const post = res.data.ALLPOSTS.filter((post) => post._id === postId)[0];
-        console.log(post);
         if (post) {
           setTodoData({
             title: post.title || "",
@@ -57,14 +55,12 @@ const AddTodo = ({postId}) => {
           });
         }
       } catch (error) {
-        console.error(error);
+        toast.error(error.response.data.msg || error.code);
       }
     };
 
     fetchAllPosts();
   }, [postId]);
-
-  console.log(date);
   const dateObject = date ? new Date(date.split("/").reverse().join("-")) : null;
 
   const assignClkHandler = (email) => {
@@ -84,13 +80,10 @@ const AddTodo = ({postId}) => {
   };
 
   const updateTodoHandler = async () => {
-    console.log(todoData);
-    console.log(postId);
     dispatch(updateTodoFlash(false));
     const toastId = toast.loading("Updating...");
     try {
       const res = await axios.put(`api/updatePost/${postId}`, todoData);
-      console.log(res);
       toast.success(res.data.msg, {
         id: toastId,
       });
@@ -99,8 +92,6 @@ const AddTodo = ({postId}) => {
         dispatch(increaseVal());
       }, 10);
     } catch (error) {
-      console.log(error);
-      console.log(error.response.data.msg);
       toast.error(error.response.data.msg, {
         id: toastId,
       });

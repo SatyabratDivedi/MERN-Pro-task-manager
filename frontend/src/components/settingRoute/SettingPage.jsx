@@ -29,7 +29,6 @@ const SettingPage = () => {
   const fetchLoginUser = async () => {
     try {
       const res = await axios.get("/api/getLoginUserDetails");
-      console.log(res.data.user);
       if (res?.data?.user) {
         const {name, email} = res.data.user;
         setUser({
@@ -48,16 +47,13 @@ const SettingPage = () => {
   };
 
   const updateDetailsHandler = async () => {
-    console.log(user);
     const tosdtId = toast.loading("Please wait...");
     try {
       const res = await axios.put("/api/updateUserDetails", {user});
-      console.log(res);
       toast.success(res.data.msg, {
         id: tosdtId,
       });
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.msg, {
         id: tosdtId,
       });
@@ -73,18 +69,21 @@ const SettingPage = () => {
       <div className={style.mainContainer}>
         <div className={style.heading}>Setting</div>
         <div className={style.boxContainer}>
+          {/* Name Section */}
           <div className={style.box}>
             <div className={style.imgInpArea}>
               <IoPersonOutline className={style.icon} />
               <input className={style.input} type="text" name="name" placeholder="Name" value={name || "Loading..."} onChange={editHandle} />
             </div>
           </div>
+          {/* Email Section */}
           <div className={style.box}>
             <div className={style.imgInpArea}>
               <CiMail className={style.icon} />
               <input className={style.input} type="email" name="email" placeholder="Email" value={email || "Loading..."} onChange={editHandle} />
             </div>
           </div>
+          {/* Old Password Section */}
           <div className={style.box}>
             <div className={style.imgInpArea}>
               <CiLock className={style.icon} />
@@ -94,6 +93,7 @@ const SettingPage = () => {
               {showPassword ? <LuEyeOff /> : <FiEye />}
             </div>
           </div>
+          {/* New Password Section */}
           <div className={style.box}>
             <div className={style.imgInpArea}>
               <CiLock className={style.icon} />

@@ -1,4 +1,4 @@
-import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 
 const SkeletonLoader = () => {
   return (

@@ -10,12 +10,14 @@ import toast from "react-hot-toast";
 const SignlePostPage = () => {
   const [post, setPost] = useState({});
   const {postId} = useParams();
-  console.log(post);
 
   const fetchPostData = async () => {
+   try {
     const res = await axios.get(`/api/getOnePost/${postId}`);
-    console.log(res);
     setPost(res.data);
+   } catch (error) {
+    toast.error(error.response.data.msg);
+   }
   };
   useEffect(() => {
     fetchPostData();
@@ -36,20 +38,20 @@ const SignlePostPage = () => {
   return (
     <>
       <div className={style.mainContainer}>
+        {/* Header Section */}
         <div className={style.header}>
           <PiCodesandboxLogoLight className={style.headerIcon} />
           <div className={style.headerTxt}>Pro Manage</div>
         </div>
         <div className={style.mainContainer2}>
           <div className={style.heroContainer}>
+             {/* Priority Section */}
             <div className={style.prioritySection}>
               <div style={{background: post.priority === "HIGH PRIORITY" ? "#FF2473" : post.priority == "MODERATE PRIORITY" ? "#18B0FF" : post.priority == "LOW PRIORITY" ? "#18B0FF" : "#707070"}} className={style.priorityCircle}></div>
               <div className={style.priorityTxt}>{post.priority || <Skeleton />}</div>
             </div>
             <div className={style.title}>{post.title || <Skeleton width={300} />} </div>
-
             {/* checklist start */}
-
             <div className={style.checklistMainContainer}>
               <div className={style.titleSection}>
                 <div>
@@ -67,9 +69,7 @@ const SignlePostPage = () => {
                 }) || <Skeleton count={5} height={25} />}
               </div>
             </div>
-
-            {/* checklist end */}
-
+            {/* Due Date Section */}
             <div className={style.footerDateSection} style={{display: post.date == "" ? "none" : ""}}>
               <div>Due Dat</div>
               <div style={{color: formatDate(post?.date).color === "#CF3636" ? "white" : "black", background: post?.catogary === "Done" ? "#63C05B" : formatDate(post?.date).color, cursor: "text"}} className={style.footerbox}>

@@ -69,6 +69,7 @@ const Register = () => {
   return (
     <>
       <div className={style.container}>
+        {/* Left Section */}
         <div className={style.left}>
           <div className={style.img}>
             <img src="src/assets/Art.png" height={400} width={400} alt="" />
@@ -76,19 +77,23 @@ const Register = () => {
           <div className={style.welcomeText}>Welcome aboard my friend</div>
           <div>just a couple of clicks and we start</div>
         </div>
+        {/* Right Section */}
         <div className={style.right}>
           <div className={style.formHeaderTxt}>Register</div>
           <form onSubmit={registerHandle}>
+            {/* Name Input Section */}
             <div className={style.InpMain}>
               <IoPersonOutline className={style.icon} />
               <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Name" aria-label="Name" />
               {errors.name && <div className={style.require}>*Required</div>}
             </div>
+            {/* Email Input Section */}
             <div className={style.InpMain}>
               <CiMail className={style.icon} />
               <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="Email" aria-label="Email" required />
               {errors.email && <div className={style.require}>*Required</div>}
             </div>
+            {/* Password Input Section */}
             <div className={style.InpMain}>
               <CiLock className={style.icon} />
               <input type={showPassword ? "password" : "text"} name="password" placeholder="Password" value={formData.password} onChange={handleInputChange} aria-label="Password" />
@@ -97,13 +102,15 @@ const Register = () => {
               </div>
               {errors.password && <div className={style.require}>*{errors.passwordErrMsg}</div>}
             </div>
+            {/* Confirm Password Input Section */}
             <div className={style.InpMain}>
-            <CiLock className={style.icon} />
+              <CiLock className={style.icon} />
               <input type={showPassword2 ? "password" : "text"} name="password2" placeholder="Confirm Password" value={formData.password2} onChange={handleInputChange} aria-label="Confirm Password" />
               <div onClick={() => setShowPassword2(!showPassword2)} style={{translate: "-15px", fontSize: "22px", cursor: "pointer", color: "#999"}}>
                 {showPassword2 ? <FiEyeOff /> : <FiEye />}
               </div>
             </div>
+            {/* Register Button Section */}
             <button type="submit" className={style.filledBtn}>
               Register
             </button>

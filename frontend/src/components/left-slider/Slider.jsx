@@ -1,4 +1,4 @@
-import {Link, NavLink, Navigate} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import style from "./slider.module.css";
 import {MdOutlineSpaceDashboard} from "react-icons/md";
 import {CiSettings} from "react-icons/ci";
@@ -6,11 +6,10 @@ import {GoDatabase} from "react-icons/go";
 import {PiCodesandboxLogoLight} from "react-icons/pi";
 import {IoLogOutOutline} from "react-icons/io5";
 import {logoutFlash} from "../../reduxStore/FlashSlice";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 
 const Slider = () => {
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.loginReducer.isLoginState);
   const logoutHandler = () => {
     dispatch(logoutFlash(true));
     localStorage.removeItem("isLogin");
@@ -19,9 +18,6 @@ const Slider = () => {
   return (
     <>
       {
-        // !isLogin ? (
-        //   ""
-        // ) :
         <div className={style.sliderContainer}>
           <div className={style.linkStyle}>
             <Link to={"/"} className={style.navIcon} style={{fontWeight: "600", color: "black", marginBottom: "25px"}}>

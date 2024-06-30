@@ -2,25 +2,23 @@ import axios from "axios";
 import style from "./analytics.module.css";
 import {useEffect, useState} from "react";
 import Skeleton from "react-loading-skeleton";
+import toast from "react-hot-toast";
 
 const AnalyticsRoute = () => {
   const [allPosts, setAllPosts] = useState();
   const fetchAllPosts = async () => {
     try {
       const res = await axios.get("/api/get_all_posts");
-      console.log(res.data);
       setAllPosts(res.data);
     } catch (error) {
-      console.error(error.post, error);
+      toast.error(error.response.data.msg || error.code);
     }
   };
   useEffect(() => {
     fetchAllPosts();
-    console.log(allPosts);
   }, []);
 
   const postsLength = (post) => {
-    console.log(post);
     if (post?.length == undefined || post?.length == null) {
       setTimeout(() => {
         return 0;
@@ -30,11 +28,32 @@ const AnalyticsRoute = () => {
     return post?.length;
   };
 
+  const countOlderPosts = (data) => {
+    if (!data) return <Skeleton width={"30px"} />;
+    let count = 0;
+    let postsHaveDate = data?.length;
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    data?.forEach((post) => {
+      if (post?.date) {
+        const postDate = new Date(post.date);
+        postDate.setHours(0, 0, 0, 0);
+        if (postDate < currentDate) {
+          count++;
+        }
+      } else {
+        postsHaveDate--;
+      }
+    });
+    return postsHaveDate - count;
+  };
+
   return (
     <>
       <div className={style.mainContainer}>
         <h4 className={style.heading}>Analytics</h4>
         <div className={style.boxContainer}>
+            {/* Analytics Section */}
           <div className={style.box}>
             <div className={style.boxTxtHead}>
               <div className={style.boxTxt}>
@@ -92,7 +111,7 @@ const AnalyticsRoute = () => {
                 <div className={style.cercle}></div>
                 Due Date Tasks
               </div>
-              <span style={{fontWeight: "600"}}>16</span>
+              <span style={{fontWeight: "600"}}>{countOlderPosts(allPosts?.ALLPOSTS)}</span>
             </div>
           </div>
         </div>

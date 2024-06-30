@@ -32,7 +32,6 @@ const AddTodo = () => {
   const fetchLoginUser = async () => {
     try {
       const res = await axios.get("/api/getLoginUserDetails");
-      console.log(res.data.user);
       setLoginUserData(res.data.user);
     } catch (error) {
       toast.error(error.code);
@@ -41,9 +40,6 @@ const AddTodo = () => {
 
   useEffect(() => {
     fetchLoginUser();
-    setTimeout(() => {
-      console.log(loginUserData);
-    }, 2);
   }, []);
 
   const assignClkHandler = (email) => {
@@ -56,12 +52,10 @@ const AddTodo = () => {
     setTodoData({...todoData, date: date.toLocaleDateString("en-IN")});
   };
   const todoDataSaveHandler = async () => {
-    console.log(todoData);
     dispatch(addTodoFlash(false));
     const toastId = toast.loading("Creating...");
     try {
       const res = await axios.post("/api/createPost", todoData);
-      console.log(res);
       toast.success(res.data.msg, {
         id: toastId,
       });
@@ -70,8 +64,7 @@ const AddTodo = () => {
         dispatch(increaseVal());
       }, 10);
     } catch (error) {
-      console.log(error);
-      toast.error(error.code, {
+      toast.error(error.response.data.msg, {
         id: toastId,
       });
     }
@@ -88,12 +81,14 @@ const AddTodo = () => {
       <div className={style.mainContainer}>
         <div>
           <div className={style.container}>
+            {/* Title Section */}
             <div style={{display: "flex", flexDirection: "column"}}>
               <div className={style.titleSection}>
                 <div>Title</div> <FaStarOfLife className={style.starIcon} />
               </div>
               <input className={style.input} type="text" required onChange={(e) => setTodoData({...todoData, title: e.target.value})} value={title} autoFocus placeholder="Enter Task Title" name="" />
             </div>
+            {/* Priority Section */}
             <div className={style.priorityContainer}>
               <div className={style.titleSection}>
                 <div>Select Priority</div>
@@ -112,6 +107,7 @@ const AddTodo = () => {
                 <div onClick={() => setTodoData({...todoData, priority: "LOW PRIORITY"})}>LOW PRIORITY</div>
               </div>
             </div>
+            {/* Assign Section */}
             <div className={style.assignContainer}>
               <div className={style.titleSection}>Assign to</div>
               <input onClick={() => setShowAssignContainer(!showAssignContainer)} className={style.input} value={assignTo} placeholder="Add a assignee" name="" id="" />
@@ -136,6 +132,7 @@ const AddTodo = () => {
                 )}
               </div>
             </div>
+            {/* CheckList Section */}
             <div className={style.checklistMainContainer}>
               <div className={style.titleSection}>
                 <div>
@@ -181,6 +178,7 @@ const AddTodo = () => {
                 </div>
               </div>
             </div>
+            {/* Button Section */}
             <div className={style.bothButton}>
               <DatePickerComponent selectedDate={selectedDate} onDateChange={handleDateChange} />
               <button type="button" onClick={() => dispatch(addTodoFlash(false))} className={style.cancleBtn}>

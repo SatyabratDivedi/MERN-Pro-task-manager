@@ -1,4 +1,3 @@
-// Import necessary libraries and components
 import {useState} from "react";
 import style from "./login.module.css";
 import {FiEye, FiEyeOff} from "react-icons/fi";
@@ -38,8 +37,7 @@ const Login = () => {
     if (!validateForm()) return;
     const toastId = toast.loading("Checking...");
     try {
-      const res = await axios.post("/api/sign-in", formData, {withCredentials: true});
-      console.log(res);
+      await axios.post("/api/sign-in", formData, {withCredentials: true});
       toast.remove(toastId);
       dispatch(isLogin(true));
       navigate("/");
@@ -81,6 +79,7 @@ const Login = () => {
               </div>
               {formErrors.password && <div className={style.require}>*Required</div>}
             </div>
+            {/* Login Button */}
             <button type="submit" className={style.filledBtn}>
               Log in
             </button>

@@ -12,14 +12,12 @@ const AddPeoplePage = () => {
     e.preventDefault();
     if (emailEdit) {
       try {
-        const res = await axios.post("/api/addAssignUser", {email: emailEdit});
-        console.log(res);
+        await axios.post("/api/addAssignUser", {email: emailEdit});
         dispatch(peopleAddFlash(false));
         setEmailEdit("");
         dispatch(successFlash(true));
         dispatch(successFlash({display: "true", addedEmail: emailEdit}));
       } catch (error) {
-        console.log(error);
         dispatch(peopleAddFlash(false));
         setEmailEdit("");
         if (error.response.status == "409") {
@@ -38,6 +36,7 @@ const AddPeoplePage = () => {
           <div className={style.emailInput}>
             <input className={style.input} type="email" required onChange={(e) => setEmailEdit(e.target.value)} value={emailEdit} autoFocus placeholder="Enter the email" name="" id="" />
           </div>
+            {/* Button Section */}
           <div className={style.bothButton}>
             <button type="button" onClick={() => dispatch(peopleAddFlash(false))} className={style.cancleBtn}>
               Cancle

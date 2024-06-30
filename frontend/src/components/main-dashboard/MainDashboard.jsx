@@ -2,8 +2,8 @@ import style from "./dashboard.module.css";
 import {GoPeople} from "react-icons/go";
 import {VscCollapseAll} from "react-icons/vsc";
 import PostCard from "../postCard/PostCard";
-import {useEffect, useMemo, useState} from "react";
-import {IoAddSharp, IoFastFood} from "react-icons/io5";
+import {useEffect, useState} from "react";
+import {IoAddSharp} from "react-icons/io5";
 import {useDispatch, useSelector} from "react-redux";
 import {addTodoFlash, peopleAddFlash} from "../../reduxStore/FlashSlice";
 import axios from "axios";
@@ -19,10 +19,7 @@ const MainDashboard = () => {
   const [userData, setUserData] = useState();
   const [loader, setLoader] = useState(true);
   const changeCatogary = useSelector((state) => state.changeCatogaryReducer.value);
-  console.log("changeCatogary: ", changeCatogary);
   const [allPosts, setAllPosts] = useState([]);
-  console.log(allPosts);
-  console.log(userData?.user.email);
 
   const toggleCollapse = (item) => {
     setCollapse((prevState) => ({...prevState, [item]: !prevState[item]}));
@@ -41,7 +38,6 @@ const MainDashboard = () => {
     }
     try {
       const data = await axios.get("/api/getLoginUserDetails");
-      console.log(data);
       setUserData(data.data);
       if (isFirstVisit) {
         setTimeout(() => {
@@ -53,7 +49,6 @@ const MainDashboard = () => {
         localStorage.setItem("isLogin", true);
       }
     } catch (error) {
-      console.log(error);
       setTimeout(() => {
         navigate("/login");
       }, 1001);
@@ -77,11 +72,10 @@ const MainDashboard = () => {
   const fetchAllPosts = async () => {
     try {
       const res = await axios.get("/api/get_all_posts");
-      console.log(res.data);
       setAllPosts(res.data);
       setLoader(false);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.msg);
     }
   };
   useEffect(() => {
@@ -92,8 +86,6 @@ const MainDashboard = () => {
   }, [changeCatogary]);
 
   const getCategoriesPosts = (catogory) => {
-    console.log(catogory);
-    console.log(allPosts.ASSIGNEDPOSTS);
     let posts = [];
     if (catogory === "To do") posts = allPosts?.TODO || [];
     if (catogory === "Backlog") posts = allPosts?.BACKLOG || [];
@@ -102,7 +94,6 @@ const MainDashboard = () => {
 
     return [...posts];
   };
-  console.log(allPosts);
 
   function formatDateSimple(date) {
     const suffixes = ["th", "st", "nd", "rd"];
@@ -116,11 +107,9 @@ const MainDashboard = () => {
   }
   const date = formatDateSimple(new Date());
   return (
+    
     <>
       {
-        // !isLogin ? (
-        //   ""
-        // ) :
         <div className={style.container}>
           <div className={style.welcome}>
             <div>Welcome! {userData?.user?.name || <Skeleton height={20} width={150} />}</div>
@@ -152,7 +141,7 @@ const MainDashboard = () => {
                   </div>
                   <div style={{paddingInline: "10px"}}>
                     {loader ? (
-                      <div >
+                      <div>
                         <SkeletonLoader />
                         <SkeletonLoader />
                       </div>
@@ -162,8 +151,7 @@ const MainDashboard = () => {
                           <PostCard post={post} loginUser={userData?.user} collapse={collapse[catogary]} catogary={catogary} />
                         </div>
                       ))
-                    )
-                    }
+                    )}
                   </div>
                 </div>
               ))}

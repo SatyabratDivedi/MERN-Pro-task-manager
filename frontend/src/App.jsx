@@ -18,8 +18,6 @@ const App = () => {
     logoutFlashPage: showLogoutPage,
     updateTodoFlashPage: showUpdateTodoPage
     } = useSelector((state) => state.flashReducer);
-console.log(showUpdateTodoPage)
-console.log(showDeleteTodoPage)
   const loginRoute = useMatch("/login");
   const ragisterRoute = useMatch("/register");
 

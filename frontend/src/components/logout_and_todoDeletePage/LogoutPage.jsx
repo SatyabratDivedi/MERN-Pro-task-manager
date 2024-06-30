@@ -14,7 +14,6 @@ const Logout = () => {
   const logoutHandler = async () => {
     try {
       const data = await axios.get("/api/logout");
-      console.log(data);
       if (data.status == 200) {
         navigate("/login");
         dispatch(logoutFlash(false));
@@ -33,6 +32,7 @@ const Logout = () => {
           <div style={{fontSize: "14px", marginBottom: "9px"}} className={style.headerTxt}>
             Are you sure you want to Logout?
           </div>
+            {/* Bottom Section */}
           <button onClick={logoutHandler} style={btnStyle} type="submit" className={style.addEmailBtn}>
             Yes, Logout
           </button>

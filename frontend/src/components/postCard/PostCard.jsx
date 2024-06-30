@@ -13,7 +13,6 @@ import {format} from "date-fns";
 import toast from "react-hot-toast";
 
 const PostCard = ({collapse, catogary, post, loginUser}) => {
-  console.log(post);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [threeDotOpen, setThreeDotOpen] = useState(false);
@@ -42,7 +41,6 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
     const toastId = toast.loading("Please wait...");
     try {
       const res = await axios.put(`/api/updatePostCatogary/`, {postId, catogary});
-      console.log(res);
       if (res.status == 200) {
         toast.success(res.data.msg, {
           id: toastId,
@@ -53,8 +51,6 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
         }, 10);
       }
     } catch (error) {
-      console.log(error);
-      console.log(error.response.data.msg);
       toast.error(error.response.data.msg, {
         id: toastId,
       });
@@ -70,6 +66,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
     const [day, month, year] = dateString.split("/");
     const date = new Date(year, month - 1, day);
     const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
     const isOlder = date < currentDate;
     const formattedDate = format(date, "MMM do");
     const color = isOlder ? "#CF3636" : "#DBDBDB";
@@ -81,7 +78,6 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
     const toastId = toast.loading("Please wait...");
     try {
       const res = await axios.put(`/api/updateCheckList`, {todo, post});
-      console.log(res);
       if (res.status == 200) {
         dispatch(increaseVal());
         toast.success(res.data, {
@@ -102,6 +98,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   return (
     <div className={style.mainBox}>
       <div className={style.prioritySection}>
+          {/* Priority Section */}
         <div className={style.priorityChild}>
           <div style={{background: post.priority === "HIGH PRIORITY" ? "#FF2473" : post.priority == "MODERATE PRIORITY" ? "#18B0FF" : "#63C05B"}} className={style.Circle}></div>
           <div>{post.priority}</div>
@@ -112,6 +109,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
             <div>{post?.assignTo}</div>
           </div>
         </div>
+          {/* Edit, Share and Delete Section */}
         <div>
           <BsThreeDots onClick={() => setThreeDotOpen(!threeDotOpen)} className={style.threeDot} />
           <div style={{display: threeDotOpen ? "flex" : "none"}} className={style.threeDotElement}>
@@ -128,6 +126,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
         </div>
       </div>
       <div className={style.hero}>{post.title || <Skeleton width={"50px"} />}</div>
+        {/* Checklist Section */}
       <div className={style.checklist}>
         <div>
           Checklist ({post?.todosList.filter((todo) => todo.isCompleted).length}/{post?.todosList?.length})
@@ -136,6 +135,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
           {open ? <IoChevronUpSharp /> : <IoChevronDownSharp />}
         </div>
       </div>
+       {/* Checklist todo maping Section */}
       <div style={{display: open ? "block" : "none"}} className={style.todoBoxContainer}>
         {post.todosList.map((list, i) => {
           return (
@@ -146,6 +146,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
           );
         })}
       </div>
+       {/* Catogary Changing Section */}
       <div className={style.footer}>
         <div style={{color: formatDate(post?.date).color === "#CF3636" ? "white" : "black", background: catogary === "Done" ? "#63C05B" : formatDate(post?.date).color, visibility: post.date == "" ? "hidden" : "visible", cursor: "text"}} className={style.footerbox}>
           {formatDate(post?.date).formattedDate}
