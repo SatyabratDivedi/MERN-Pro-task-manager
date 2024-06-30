@@ -1,6 +1,5 @@
 const express = require("express");
 const route2 = express();
-// const authCheck = require("../middleware/authCheck");
 const userModel = require("../models/userSchema");
 const postModel = require("../models/postSchema");
 const assignUserModel = require("../models/assignUserSchema");
@@ -9,6 +8,9 @@ var jwt = require("jsonwebtoken");
 route2.post("/createPost", authCheck, async (req, res) => {
   try {
     const {title, catogary, priority, assignTo, Checklist, date} = req.body;
+    if (!title) return res.status(400).json({msg: "Title is required"});
+    if (!priority) return res.status(400).json({msg: "Priority is required"});
+    if (Checklist.length === 0) return res.status(400).json({msg: "At least one todo is required"});
     const findUser = await userModel.findOne({email: req.user.email});
     const findAssignUser = await assignUserModel.findOne({email: assignTo});
     const findAssignUserInMainUser = await userModel.findOne({email: assignTo});
@@ -31,7 +33,6 @@ route2.post("/createPost", authCheck, async (req, res) => {
     findUser.posts.push(newPost._id);
     await findUser.save();
     const updatedUser = await userModel.findById(findUser._id).populate("posts");
-    console.log("updatedUser: ", updatedUser);
     return res.status(200).json({msg: "post created successfully"});
   } catch (error) {
     return res.status(404).send({msg: "something went wrong"});
@@ -66,18 +67,17 @@ route2.get("/get_all_posts", authCheck, async (req, res) => {
 
 route2.get("/getOnePost/:postId", async (req, res) => {
   const postId = req.params.postId;
-  console.log("postId: ", postId);
-
+  if(postId.length < 24){
+    return res.status(404).json({msg: "Post not found"});
+  }
   const findPost = await postModel.findById(postId);
-  console.log("findPost: ", findPost);
-
+  if (!findPost) {
+    return res.status(404).json({msg: "Post not found"});
+  }
   try {
-    if (!findPost) {
-      return res.status(404).json({msg: "Post not found"});
-    }
     return res.status(200).json(findPost);
   } catch (error) {
-    console.log(error);
+    return res.status(404).send({msg: "something went wrong"});
   }
 });
 
@@ -109,7 +109,6 @@ route2.put("/updatePost/:postId", authCheck, async (req, res) => {
     const oldAssighUserMainAcc = await userModel.findOne({email: findPost.assignTo});
     const newAssignUserMainAcc = await userModel.findOne({email: assignTo});
     if (!oldAssighUser && !newAssignUser) {
-      console.log("phle bhi nalla tha abhi bhi nalla hai");
     } else if (!oldAssighUser && newAssignUser) {
       newAssignUser.posts.push(findPost._id);
       await newAssignUser.save();
@@ -117,7 +116,6 @@ route2.put("/updatePost/:postId", authCheck, async (req, res) => {
       await findPost.save();
       newAssignUserMainAcc.posts.push(findPost._id);
       await newAssignUserMainAcc.save();
-      console.log("purana user nahi tha aur nya user assign huaa hai");
     } else if (oldAssighUser && newAssignUser) {
       if (oldAssighUser.email != newAssignUser.email) {
         oldAssighUser.posts = oldAssighUser.posts.filter((post) => post._id.toString() != findPost._id.toString());
@@ -130,18 +128,16 @@ route2.put("/updatePost/:postId", authCheck, async (req, res) => {
         await oldAssighUserMainAcc.save();
         newAssignUserMainAcc.posts.push(findPost._id);
         await newAssignUserMainAcc.save();
-        console.log(" old user remove and new user assign");
       } else {
         findPost.assignTo = newAssignUser.email;
-        console.log("old user hi assign");
+        await findPost.save();
       }
     }
     findPost.title = title;
     findPost.priority = priority;
     findPost.todosList = Checklist;
     findPost.date = date;
-    const updatePost = await findPost.save();
-    console.log("updatePost: ", updatePost);
+    await findPost.save();
     return res.status(200).json({msg: "post updated successfully"});
   } catch (error) {
     return res.status(404).json({msg: "something went wrong"});
@@ -155,11 +151,9 @@ route2.put("/updateCheckList/", authCheck, async (req, res) => {
     if (!findPost || !todo || !post) {
       return res.status(404).json({msg: "Post not found"});
     }
-    console.log("findPost: ", findPost);
     const findTodo = findPost.todosList.find((item) => item._id.toString() == todo._id.toString());
-    console.log(findTodo);
     if (findTodo) {
-      const todoUpdate = await postModel.findByIdAndUpdate(
+      await postModel.findByIdAndUpdate(
         post._id,
         {$set: {"todosList.$[todoItem].isCompleted": !findTodo.isCompleted}},
         {
@@ -172,7 +166,6 @@ route2.put("/updateCheckList/", authCheck, async (req, res) => {
       res.status(404).send("Todo not found");
     }
   } catch (error) {
-    console.error("Error updating todo: ", error);
     res.status(500).send({msg: "Error updating todo"});
   }
 });
@@ -204,7 +197,6 @@ route2.delete("/deletePost/:postId", authCheck, async (req, res) => {
       findUserInAssing.posts = findUserInAssing.posts.filter((post) => post._id.toString() != postId);
       await findUserInAssing.save();
     }
-    console.log("delete ho gya");
     return res.status(200).json({msg: "post deleted successfully"});
   } catch (error) {
     return res.status(404).json({msg: "something went wrong"});
