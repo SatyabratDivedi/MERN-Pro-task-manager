@@ -16,6 +16,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [threeDotOpen, setThreeDotOpen] = useState(false);
+  const [tooltip, setTooltip] = useState(false);
 
   useEffect(() => {
     setOpen(false);
@@ -98,7 +99,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   return (
     <div className={style.mainBox}>
       <div className={style.prioritySection}>
-          {/* Priority Section */}
+        {/* Priority Section */}
         <div className={style.priorityChild}>
           <div style={{background: post.priority === "HIGH PRIORITY" ? "#FF2473" : post.priority == "MODERATE PRIORITY" ? "#18B0FF" : "#63C05B"}} className={style.Circle}></div>
           <div>{post.priority}</div>
@@ -109,7 +110,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
             <div>{post?.assignTo}</div>
           </div>
         </div>
-          {/* Edit, Share and Delete Section */}
+        {/* Edit, Share and Delete Section */}
         <div>
           <BsThreeDots onClick={() => setThreeDotOpen(!threeDotOpen)} className={style.threeDot} />
           <div style={{display: threeDotOpen ? "flex" : "none"}} className={style.threeDotElement}>
@@ -125,8 +126,15 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
           </div>
         </div>
       </div>
-      <div className={style.hero}>{post.title || <Skeleton width={"50px"} />}</div>
-        {/* Checklist Section */}
+      {/* Title Section */}
+      {post.title.length > 30 && (
+        <div style={{display: tooltip ? "block" : "none"}} className={style.hiddenTitle}>
+          {post.title}
+        </div>
+      )}
+      <div onMouseEnter={() => setTooltip(true)} onMouseLeave={() => setTooltip(false)} className={style.hero}>
+        {post.title ? post.title.slice(0, 30) + (post.title.length > 30 ? "..." : "") : <Skeleton width={"50px"} />}
+      </div>
       <div className={style.checklist}>
         <div>
           Checklist ({post?.todosList.filter((todo) => todo.isCompleted).length}/{post?.todosList?.length})
@@ -135,7 +143,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
           {open ? <IoChevronUpSharp /> : <IoChevronDownSharp />}
         </div>
       </div>
-       {/* Checklist todo maping Section */}
+      {/* Checklist todo maping Section */}
       <div style={{display: open ? "block" : "none"}} className={style.todoBoxContainer}>
         {post.todosList.map((list, i) => {
           return (
@@ -146,7 +154,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
           );
         })}
       </div>
-       {/* Catogary Changing Section */}
+      {/* Catogary Changing Section */}
       <div className={style.footer}>
         <div style={{color: formatDate(post?.date).color === "#CF3636" ? "white" : "black", background: catogary === "Done" ? "#63C05B" : formatDate(post?.date).color, visibility: post.date == "" ? "hidden" : "visible", cursor: "text"}} className={style.footerbox}>
           {formatDate(post?.date).formattedDate}

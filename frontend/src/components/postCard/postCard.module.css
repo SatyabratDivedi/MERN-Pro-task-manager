@@ -44,7 +44,9 @@
   max-width: 140px;
   overflow-y: auto;
   color: black;
-  transform: translate(-7px, 3px);}
+  transform: translate(-7px, 3px);
+}
+
 .nameCircle:hover + .assignEmail {
   flex-direction: column;
   display: flex;
@@ -82,6 +84,30 @@
 }
 .DotElement:last-child {
   color: #cf3636;
+}
+
+.hiddenTitle {
+  display: none;
+  position: absolute;
+  width: 87%;
+  top: 10px;
+  left: 1;
+  background-color: rgba(214, 214, 214, 0.863);
+  font-size: 12px;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 2px 3px;
+}
+.hiddenTitle::after {
+  content: "";
+  position: absolute;
+  margin-left: -5px;
+  border-width: 5px;
+  bottom: -10px;
+  left: 50%;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
 }
 
 .hero {
@@ -133,7 +159,7 @@
   margin-left: 6px;
   cursor: pointer;
 }
-.todoContent{
+.todoContent {
   text-align: start;
 }
 .footer {
