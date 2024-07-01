@@ -7,6 +7,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import {useDispatch} from "react-redux";
 import {isLogin} from "../../reduxStore/isLoginSlice";
+import mainImg from './../../assets/Art.png';
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -55,7 +57,7 @@ const Login = () => {
         {/* Left Section */}
         <div className={style.left}>
           <div className={style.img}>
-            <img src="src/assets/Art.png" height={400} width={400} alt="" />
+            <img src={mainImg} height={400} width={400} alt="" />
           </div>
           <div className={style.welcomeText}>Welcome aboard my friend</div>
           <div>just a couple of clicks and we start</div>
