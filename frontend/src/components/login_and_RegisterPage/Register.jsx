@@ -6,6 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import {IoPersonOutline} from "react-icons/io5";
 import {CiMail, CiLock} from "react-icons/ci";
+import mainImg from './../../assets/Art.png';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ const Register = () => {
         {/* Left Section */}
         <div className={style.left}>
           <div className={style.img}>
-            <img src="src/assets/Art.png" height={400} width={400} alt="" />
+            <img src={mainImg} height={400} width={400} alt="" />
           </div>
           <div className={style.welcomeText}>Welcome aboard my friend</div>
           <div>just a couple of clicks and we start</div>
