@@ -7,7 +7,7 @@ var jwt = require("jsonwebtoken");
 
 route2.post("/createPost", authCheck, async (req, res) => {
   try {
-    const {title, catogary, priority, assignTo, Checklist, date} = req.body;
+    const {title, catogary, priority, assignTo, Checklist, date} = req.body.todoData;
     if (!title) return res.status(400).json({msg: "Title is required"});
     if (!priority) return res.status(400).json({msg: "Priority is required"});
     if (Checklist.length === 0) return res.status(400).json({msg: "At least one todo is required"});
@@ -39,7 +39,7 @@ route2.post("/createPost", authCheck, async (req, res) => {
   }
 });
 
-route2.get("/get_all_posts", authCheck, async (req, res) => {
+route2.post("/get_all_posts", authCheck, async (req, res) => {
   try {
     const findLoginUser = await userModel.findById(req.user._id).populate("posts");
     const allPostsAndAssignUsres = [...findLoginUser.posts];
@@ -67,7 +67,7 @@ route2.get("/get_all_posts", authCheck, async (req, res) => {
 
 route2.get("/getOnePost/:postId", async (req, res) => {
   const postId = req.params.postId;
-  if(postId.length < 24){
+  if (postId.length < 24) {
     return res.status(404).json({msg: "Post not found"});
   }
   const findPost = await postModel.findById(postId);
@@ -99,7 +99,11 @@ route2.put("/updatePostCatogary", authCheck, async (req, res) => {
 route2.put("/updatePost/:postId", authCheck, async (req, res) => {
   const postId = req.params.postId;
   try {
-    const {title, priority, assignTo, Checklist, date} = req.body;
+    const {title, priority, assignTo, Checklist, date} = req.body.todoData;
+    if (!title) return res.status(400).json({msg: "Title is required"});
+    if (!priority) return res.status(400).json({msg: "Priority is required"});
+    if (Checklist.length === 0) return res.status(400).json({msg: "At least one todo is required"});
+
     const findPost = await postModel.findById(postId);
     if (!findPost) {
       return res.status(404).json({msg: "Post not found"});
@@ -170,7 +174,7 @@ route2.put("/updateCheckList/", authCheck, async (req, res) => {
   }
 });
 
-route2.delete("/deletePost/:postId", authCheck, async (req, res) => {
+route2.delete("/deletePost/:postId", async (req, res) => {
   const postId = req.params.postId;
   const loginUserEmail = req.user.email;
   const findPostForDelete = await postModel.findById(postId);
@@ -204,7 +208,8 @@ route2.delete("/deletePost/:postId", authCheck, async (req, res) => {
 });
 
 function authCheck(req, res, next) {
-  const token = req.cookies.user_token;
+  const token = req.body.token;
+  console.log(token)
   if (!token) {
     return res.status(404).json({msg: "unauthorized! please login first"});
   }

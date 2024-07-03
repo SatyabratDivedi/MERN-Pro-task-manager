@@ -10,15 +10,17 @@ const btnStyle = {
 };
 
 const Logout = () => {
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const logoutHandler = async () => {
     try {
-      const data = await axios.get("https://pro-task-manager-3frj.vercel.app/api/logout",  {withCredentials: true});
-      if (data.status == 200) {
+      // const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/logout",{token:token},  {withCredentials: true});
+      const res = await axios.post("http://localhost:3000/api/logout",{token:token},  {withCredentials: true});
+      if (res.status == 200) {
         navigate("/login");
         dispatch(logoutFlash(false));
-        toast.success(data.data.msg);
-        localStorage.removeItem("firstVisit");
+        toast.success(res.data.msg);
+        localStorage.clear();
       }
     } catch (error) {
       toast.error(error.response.data.msg);

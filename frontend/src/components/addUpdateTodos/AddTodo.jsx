@@ -17,6 +17,7 @@ const AddTodo = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showAssignContainer, setShowAssignContainer] = useState(false);
   const [loginUserData, setLoginUserData] = useState({});
+  const token = localStorage.getItem("token");
 
   const todoArr = {
     title: "",
@@ -31,7 +32,7 @@ const AddTodo = () => {
 
   const fetchLoginUser = async () => {
     try {
-      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",  {withCredentials: true});
+      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",{token:token});
       setLoginUserData(res.data.user);
     } catch (error) {
       toast.error(error.code);
@@ -55,7 +56,7 @@ const AddTodo = () => {
     dispatch(addTodoFlash(false));
     const toastId = toast.loading("Creating...");
     try {
-      const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/createPost", todoData, {withCredentials: true});
+      const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/createPost", {todoData, token:token});
       toast.success(res.data.msg, {
         id: toastId,
       });

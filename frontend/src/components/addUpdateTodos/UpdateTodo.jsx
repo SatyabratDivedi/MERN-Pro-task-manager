@@ -16,6 +16,7 @@ const AddTodo = ({postId}) => {
   const dispatch = useDispatch();
   const [showAssignContainer, setShowAssignContainer] = useState(false);
   const [loginUserData, setLoginUserData] = useState({});
+  const token = localStorage.getItem("token");
 
   const [todoData, setTodoData] = useState({
     title: "",
@@ -29,7 +30,8 @@ const AddTodo = ({postId}) => {
 
   const fetchLoginUser = async () => {
     try {
-      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",  {withCredentials: true});
+      // const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",  {withCredentials: true});
+      const res = await axios.post("http://localhost:3000/api/getLoginUserDetails",{token:token},  {withCredentials: true});
       setLoginUserData(res.data.user);
     } catch (error) {
       toast.error(error.code);
@@ -43,7 +45,8 @@ const AddTodo = ({postId}) => {
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {
-        const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/get_all_posts",  {withCredentials: true});
+        // const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/get_all_posts",  {withCredentials: true});
+        const res = await axios.post("http://localhost:3000/api/get_all_posts",{token:token},  {withCredentials: true});
         const post = res.data.ALLPOSTS.filter((post) => post._id === postId)[0];
         if (post) {
           setTodoData({
@@ -83,7 +86,9 @@ const AddTodo = ({postId}) => {
     dispatch(updateTodoFlash(false));
     const toastId = toast.loading("Updating...");
     try {
-      const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updatePost/${postId}`, todoData,  {withCredentials: true});
+      // const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updatePost/${postId}`, todoData,  {withCredentials: true});
+      const res = await axios.put(`http://localhost:3000/api/updatePost/${postId}`,{todoData, token:token},  {withCredentials: true});
+      console.log(res)
       toast.success(res.data.msg, {
         id: toastId,
       });
@@ -92,6 +97,7 @@ const AddTodo = ({postId}) => {
         dispatch(increaseVal());
       }, 10);
     } catch (error) {
+      console.log(error)
       toast.error(error.response.data.msg, {
         id: toastId,
       });

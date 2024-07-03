@@ -17,7 +17,8 @@ const TodoDeletePage = ({postId}) => {
     dispatch(deleteTodoFlash(false))
     const toastId = toast.loading("Please wait...");
     try {
-      const res = await axios.delete(`https://pro-task-manager-3frj.vercel.app/api/deletePost/${postId}`,  {withCredentials: true});
+      const res = await axios.delete(`http://localhost:3000/deletePost/${postId}`,  {withCredentials: true});
+      console.log(ResizeObserver)
       toast.success(res.data.msg, {
         id: toastId,
       });
@@ -26,6 +27,7 @@ const TodoDeletePage = ({postId}) => {
         dispatch(increaseVal());
       }, 10);
     } catch (error) {
+      console.log(error)
       toast.error(error.response.data.msg, {
         id: toastId,
       });

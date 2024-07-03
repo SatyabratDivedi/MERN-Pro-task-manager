@@ -36,12 +36,12 @@ route.post("/sign-in", async (req, res) => {
   const isExist = await userModel.findOne({email});
   try {
     if (!isExist) {
-      return res.status(404).json({msg: "invlaid access"});
+      return res.status(404).json({msg: "user does not exist"});
     }
     bcrypt.compare(password, isExist.password, (err, result) => {
       if (result) {
         var token = jwt.sign({user: isExist}, "shhh");
-        res.cookie("user_token", token).status(202).json({msg: "login successfully", user: isExist});
+        res.status(202).json({msg: "login successfully", user: isExist, token: token});
       } else {
         return res.status(404).json({msg: "invlaid access"});
       }
@@ -121,12 +121,12 @@ route.post("/addAssignUser", authCheck, async (req, res) => {
   }
 });
 
-route.get("/getLoginUserDetails", authCheck, async (req, res) => {
+route.post("/getLoginUserDetails", authCheck, async (req, res) => {
   const findLoginUser = await userModel.findById(req.user._id).populate("assignedUsers");
   return res.status(200).json({user: findLoginUser});
 });
 
-route.get("/logout", authCheck, (req, res) => {
+route.post("/logout", authCheck, (req, res) => {
   try {
     if (req.user) {
       return res.cookie("user_token", "").status(200).json({msg: "logout successfully"});
@@ -137,7 +137,8 @@ route.get("/logout", authCheck, (req, res) => {
 });
 
 function authCheck(req, res, next) {
-  const token = req.cookies.user_token;
+  const token = req.body.token;
+  console.log(token)
   if (!token) {
     return res.status(401).json({msg: "unauthorized! please login first"});
   }

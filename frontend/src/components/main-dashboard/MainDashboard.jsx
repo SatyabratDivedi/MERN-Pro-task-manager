@@ -20,6 +20,7 @@ const MainDashboard = () => {
   const [loader, setLoader] = useState(true);
   const changeCatogary = useSelector((state) => state.changeCatogaryReducer.value);
   const [allPosts, setAllPosts] = useState([]);
+  const token = localStorage.getItem("token");
 
   const toggleCollapse = (item) => {
     setCollapse((prevState) => ({...prevState, [item]: !prevState[item]}));
@@ -37,8 +38,8 @@ const MainDashboard = () => {
       }, 0);
     }
     try {
-      const data = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails", {withCredentials: true});
-      setUserData(data.data);
+      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",{token:token});
+      setUserData(res.data);
       if (isFirstVisit) {
         setTimeout(() => {
           toast.success("🥳Login success & connected with backend", {
@@ -72,11 +73,11 @@ const MainDashboard = () => {
   };
   const fetchAllPosts = async () => {
     try {
-      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/get_all_posts", {withCredentials: true});
+      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/get_all_posts",{token:token});
       setAllPosts(res.data);
       setLoader(false);
     } catch (error) {
-      console.log('something wrong')
+      console.log(error)
     }
   };
   useEffect(() => {

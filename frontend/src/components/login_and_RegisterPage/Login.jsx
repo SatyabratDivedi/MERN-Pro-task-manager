@@ -39,11 +39,13 @@ const Login = () => {
     if (!validateForm()) return;
     const toastId = toast.loading("Checking...");
     try {
-      await axios.post("https://pro-task-manager-3frj.vercel.app/api/sign-in", formData, { withCredentials: true });
+      const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/sign-in", formData);
+      localStorage.setItem("token", res.data.token);
       toast.remove(toastId);
       dispatch(isLogin(true));
       navigate("/");
     } catch (error) {
+      console.log(error)
       const errMsg = error.response?.data?.msg || error.code;
       toast.error(errMsg, {
         id: toastId,

@@ -17,6 +17,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   const [open, setOpen] = useState(false);
   const [threeDotOpen, setThreeDotOpen] = useState(false);
   const [tooltip, setTooltip] = useState(false);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     setOpen(false);
@@ -41,7 +42,8 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   const updatePostCatogaryHandler = async (postId, catogary) => {
     const toastId = toast.loading("Please wait...");
     try {
-      const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updatePostCatogary/`, {postId, catogary},  {withCredentials: true});
+      // const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updatePostCatogary/`, {postId, catogary, token:token},  {withCredentials: true});
+      const res = await axios.put(`http://localhost:3000/api/updatePostCatogary/`, {postId, catogary, token:token},  {withCredentials: true});
       if (res.status == 200) {
         toast.success(res.data.msg, {
           id: toastId,
@@ -77,7 +79,8 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   const checkBoxHandler = async (todo, post) => {
     const toastId = toast.loading("Please wait...");
     try {
-      const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updateCheckList`, {todo, post}, {withCredentials: true});
+      // const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updateCheckList`, {todo, post, token:token}, {withCredentials: true});
+      const res = await axios.put(`http://localhost:3000/api/updateCheckList`, {todo, post, token:token}, {withCredentials: true});
       if (res.status == 200) {
         dispatch(increaseVal());
         toast.success(res.data, {
@@ -126,7 +129,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
         </div>
       </div>
       {/* Title Section */}
-      {post.title.length > 30 && (
+      {post?.title?.length > 30 && (
         <div style={{display: tooltip ? "block" : "none"}} className={style.hiddenTitle}>
           {post.title}
         </div>

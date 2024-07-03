@@ -12,6 +12,7 @@ const SettingPage = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+  const token = localStorage.getItem("token");
 
   const [user, setUser] = useState({});
   const {name, email, oldPassword, newPassword} = user;
@@ -28,7 +29,8 @@ const SettingPage = () => {
 
   const fetchLoginUser = async () => {
     try {
-      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",  {withCredentials: true});
+      // const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",{token:token},  {withCredentials: true});
+      const res = await axios.post("http://localhost:3000/api/getLoginUserDetails",{token:token},  {withCredentials: true});
       if (res?.data?.user) {
         const {name, email} = res.data.user;
         setUser({
@@ -48,7 +50,8 @@ const SettingPage = () => {
   const updateDetailsHandler = async () => {
     const tosdtId = toast.loading("Please wait...");
     try {
-      const res = await axios.put("https://pro-task-manager-3frj.vercel.app/api/updateUserDetails", {user},  {withCredentials: true});
+      // const res = await axios.put("https://pro-task-manager-3frj.vercel.app/api/updateUserDetails", {user, token:token},  {withCredentials: true});
+      const res = await axios.put("http://localhost:3000/api/updateUserDetails", {user, token:token},  {withCredentials: true});
       toast.success(res.data.msg, {
         id: tosdtId,
       });
