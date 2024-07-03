@@ -14,8 +14,7 @@ const Logout = () => {
   const navigate = useNavigate();
   const logoutHandler = async () => {
     try {
-      // const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/logout",{token:token},  {withCredentials: true});
-      const res = await axios.post("http://localhost:3000/api/logout",{token:token},  {withCredentials: true});
+      const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/logout", {token: token});
       if (res.status == 200) {
         navigate("/login");
         dispatch(logoutFlash(false));
@@ -23,6 +22,7 @@ const Logout = () => {
         localStorage.clear();
       }
     } catch (error) {
+      dispatch(logoutFlash(false));
       toast.error(error.response.data.msg);
     }
   };
@@ -34,7 +34,7 @@ const Logout = () => {
           <div style={{fontSize: "14px", marginBottom: "9px"}} className={style.headerTxt}>
             Are you sure you want to Logout?
           </div>
-            {/* Bottom Section */}
+          {/* Bottom Section */}
           <button onClick={logoutHandler} style={btnStyle} type="submit" className={style.addEmailBtn}>
             Yes, Logout
           </button>

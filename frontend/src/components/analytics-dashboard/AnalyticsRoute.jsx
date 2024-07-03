@@ -9,8 +9,7 @@ const AnalyticsRoute = () => {
   const token = localStorage.getItem("token");
   const fetchAllPosts = async () => {
     try {
-      // const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/get_all_posts",  {withCredentials: true});
-      const res = await axios.post("http://localhost:3000/api/get_all_posts",{token:token},  {withCredentials: true});
+      const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/get_all_posts",{token:token});
       setAllPosts(res.data);
     } catch (error) {
       toast.error(error.response.data.msg || error.code);

@@ -29,8 +29,7 @@ const SettingPage = () => {
 
   const fetchLoginUser = async () => {
     try {
-      // const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",{token:token},  {withCredentials: true});
-      const res = await axios.post("http://localhost:3000/api/getLoginUserDetails",{token:token},  {withCredentials: true});
+      const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",{token:token});
       if (res?.data?.user) {
         const {name, email} = res.data.user;
         setUser({
@@ -50,8 +49,7 @@ const SettingPage = () => {
   const updateDetailsHandler = async () => {
     const tosdtId = toast.loading("Please wait...");
     try {
-      // const res = await axios.put("https://pro-task-manager-3frj.vercel.app/api/updateUserDetails", {user, token:token},  {withCredentials: true});
-      const res = await axios.put("http://localhost:3000/api/updateUserDetails", {user, token:token},  {withCredentials: true});
+      const res = await axios.put("https://pro-task-manager-3frj.vercel.app/api/updateUserDetails", {user, token:token});
       toast.success(res.data.msg, {
         id: tosdtId,
       });
