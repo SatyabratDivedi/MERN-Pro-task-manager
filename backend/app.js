@@ -31,6 +31,9 @@ mongoose
 app.get("/", (req, res) => {
   res.send("this is the backend main home page");
 });
+app.get("/api", (req, res) => {
+  res.send("this is api home page");
+});
 
 app.use("/api", route);
 app.use("/api", route2);
