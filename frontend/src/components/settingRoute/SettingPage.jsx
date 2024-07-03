@@ -40,7 +40,6 @@ const SettingPage = () => {
       if (error.response.data.msg == "unauthorized! please login first") {
         toast.error(error.response.data.msg);
         navigate("/login");
-        toast.error(error.code);
         return;
       }
     }

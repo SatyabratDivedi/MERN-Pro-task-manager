@@ -55,7 +55,7 @@ const AddTodo = () => {
     dispatch(addTodoFlash(false));
     const toastId = toast.loading("Creating...");
     try {
-      const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/createPost", todoData);
+      const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/createPost", todoData, {withCredentials: true});
       toast.success(res.data.msg, {
         id: toastId,
       });
