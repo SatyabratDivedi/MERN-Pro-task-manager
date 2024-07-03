@@ -35,7 +35,7 @@ const AssignPostCard = ({collapse, catogary, post , changePostPlace, setChangePo
 
   const updatePostCatogaryHandler = async (postId, catogary) => {
     try {
-      const res = await axios.put(`/api/updatePostCatogary/`, {postId, catogary});
+      const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updatePostCatogary/`, {postId, catogary});
       console.log(res);
     } catch (error) {
       console.error("Failed to update post category:", error);

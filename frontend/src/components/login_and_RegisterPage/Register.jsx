@@ -56,14 +56,14 @@ const Register = () => {
     if (!validateForm()) return;
 
     const {name, email, password} = formData;
+    const toastId = toast.loading("Creating account...");
     try {
-      const toastId = toast.loading("Creating account...");
       const res = await axios.post("https://pro-task-manager-3frj.vercel.app/api/sign-up", {name, email, password}, { withCredentials: true });
       toast.success(res.data.msg, {id: toastId});
       navigate("/login");
     } catch (error) {
       const errMsg = error.response?.data?.msg || error.code;
-      toast.error(errMsg, {id: toast.loading("Creating account...")});
+      toast.error(errMsg, {id: toastId});
     }
   };
 

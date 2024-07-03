@@ -41,7 +41,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   const updatePostCatogaryHandler = async (postId, catogary) => {
     const toastId = toast.loading("Please wait...");
     try {
-      const res = await axios.put(`/api/updatePostCatogary/`, {postId, catogary});
+      const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updatePostCatogary/`, {postId, catogary});
       if (res.status == 200) {
         toast.success(res.data.msg, {
           id: toastId,
