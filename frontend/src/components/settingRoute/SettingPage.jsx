@@ -28,7 +28,7 @@ const SettingPage = () => {
 
   const fetchLoginUser = async () => {
     try {
-      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails");
+      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",  {withCredentials: true});
       if (res?.data?.user) {
         const {name, email} = res.data.user;
         setUser({
