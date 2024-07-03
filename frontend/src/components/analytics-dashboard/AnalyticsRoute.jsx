@@ -8,7 +8,7 @@ const AnalyticsRoute = () => {
   const [allPosts, setAllPosts] = useState();
   const fetchAllPosts = async () => {
     try {
-      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/get_all_posts");
+      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/get_all_posts",  {withCredentials: true});
       setAllPosts(res.data);
     } catch (error) {
       toast.error(error.response.data.msg || error.code);

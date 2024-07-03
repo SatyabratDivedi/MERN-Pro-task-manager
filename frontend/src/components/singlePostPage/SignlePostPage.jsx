@@ -13,7 +13,7 @@ const SignlePostPage = () => {
 
   const fetchPostData = async () => {
    try {
-    const res = await axios.get(`/api/getOnePost/${postId}`);
+    const res = await axios.get(`https://pro-task-manager-3frj.vercel.app/api/getOnePost/${postId}`,  {withCredentials: true});
     setPost(res.data);
    } catch (error) {
     toast.error(error.response.data.msg);

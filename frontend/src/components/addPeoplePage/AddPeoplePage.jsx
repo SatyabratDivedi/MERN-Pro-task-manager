@@ -12,7 +12,7 @@ const AddPeoplePage = () => {
     e.preventDefault();
     if (emailEdit) {
       try {
-        await axios.post("https://pro-task-manager-3frj.vercel.app/api/addAssignUser", {email: emailEdit});
+        await axios.post("https://pro-task-manager-3frj.vercel.app/api/addAssignUser", {email: emailEdit},  {withCredentials: true});
         dispatch(peopleAddFlash(false));
         setEmailEdit("");
         dispatch(successFlash(true));

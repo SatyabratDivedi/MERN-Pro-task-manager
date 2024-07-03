@@ -13,7 +13,7 @@ const Logout = () => {
   const navigate = useNavigate();
   const logoutHandler = async () => {
     try {
-      const data = await axios.get("https://pro-task-manager-3frj.vercel.app/api/logout");
+      const data = await axios.get("https://pro-task-manager-3frj.vercel.app/api/logout",  {withCredentials: true});
       if (data.status == 200) {
         navigate("/login");
         dispatch(logoutFlash(false));

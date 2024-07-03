@@ -31,7 +31,7 @@ const AddTodo = () => {
 
   const fetchLoginUser = async () => {
     try {
-      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails");
+      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",  {withCredentials: true});
       setLoginUserData(res.data.user);
     } catch (error) {
       toast.error(error.code);

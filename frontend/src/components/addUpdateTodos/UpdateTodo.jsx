@@ -29,7 +29,7 @@ const AddTodo = ({postId}) => {
 
   const fetchLoginUser = async () => {
     try {
-      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails");
+      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails",  {withCredentials: true});
       setLoginUserData(res.data.user);
     } catch (error) {
       toast.error(error.code);
@@ -43,7 +43,7 @@ const AddTodo = ({postId}) => {
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {
-        const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/get_all_posts");
+        const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/get_all_posts",  {withCredentials: true});
         const post = res.data.ALLPOSTS.filter((post) => post._id === postId)[0];
         if (post) {
           setTodoData({
@@ -83,7 +83,7 @@ const AddTodo = ({postId}) => {
     dispatch(updateTodoFlash(false));
     const toastId = toast.loading("Updating...");
     try {
-      const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updatePost/${postId}`, todoData);
+      const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updatePost/${postId}`, todoData,  {withCredentials: true});
       toast.success(res.data.msg, {
         id: toastId,
       });
