@@ -4,6 +4,7 @@ import {peopleAddFlash, successFlash} from "../../reduxStore/FlashSlice";
 import {useState} from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+const token = localStorage.getItem("token");
 
 const AddPeoplePage = () => {
   const [emailEdit, setEmailEdit] = useState();
@@ -12,7 +13,7 @@ const AddPeoplePage = () => {
     e.preventDefault();
     if (emailEdit) {
       try {
-        await axios.post("https://pro-task-manager-3frj.vercel.app/api/addAssignUser", {email: emailEdit},  {withCredentials: true});
+        await axios.post("https://pro-task-manager-3frj.vercel.app/api/addAssignUser", {email: emailEdit, token:token},  {withCredentials: true});
         dispatch(peopleAddFlash(false));
         setEmailEdit("");
         dispatch(successFlash(true));
