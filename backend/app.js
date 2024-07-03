@@ -13,9 +13,12 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 app.use("/public", express.static("public"));
+
+//my main website corse is not working thats why i allow all corse
+
 app.use(
   cors({
-    origin: "https://pro-task-manager.vercel.app/",
+    origin: "*",
     credentials: true,
   })
 );
