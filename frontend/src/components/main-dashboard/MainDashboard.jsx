@@ -37,7 +37,7 @@ const MainDashboard = () => {
       }, 0);
     }
     try {
-      const data = await axios.get("/api/getLoginUserDetails");
+      const data = await axios.get("https://pro-task-manager-3frj.vercel.app/api/getLoginUserDetails");
       setUserData(data.data);
       if (isFirstVisit) {
         setTimeout(() => {
@@ -71,7 +71,7 @@ const MainDashboard = () => {
   };
   const fetchAllPosts = async () => {
     try {
-      const res = await axios.get("/api/get_all_posts");
+      const res = await axios.get("https://pro-task-manager-3frj.vercel.app/api/get_all_posts");
       setAllPosts(res.data);
       setLoader(false);
     } catch (error) {
