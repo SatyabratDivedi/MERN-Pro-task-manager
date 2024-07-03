@@ -14,17 +14,19 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 app.use("/public", express.static("public"));
 
-app.use(cors({
-  origin: function(origin, callback) {
-    const allowedOrigins = ["https://pro-task-manager.vercel.app", "*"];
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS policy violation"));
-    }
-  },
-  credentials: true
-}));
+app.use((req, res, next) => {
+  const allowedOrigins = ["https://pro-task-manager.vercel.app"];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
+
+// Existing app.use(cors({...})) can be removed or adjusted as needed
 
 const PORT = process.env.PORT || 3001;
 const URI = process.env.MONGO_URI;
