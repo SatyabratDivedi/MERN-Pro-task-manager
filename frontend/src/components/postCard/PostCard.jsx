@@ -78,7 +78,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
   const checkBoxHandler = async (todo, post) => {
     const toastId = toast.loading("Please wait...");
     try {
-      const res = await axios.put(`/api/updateCheckList`, {todo, post});
+      const res = await axios.put(`https://pro-task-manager-3frj.vercel.app/api/updateCheckList`, {todo, post});
       if (res.status == 200) {
         dispatch(increaseVal());
         toast.success(res.data, {

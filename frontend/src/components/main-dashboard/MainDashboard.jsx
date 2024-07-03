@@ -51,11 +51,8 @@ const MainDashboard = () => {
     } catch (error) {
       setTimeout(() => {
         navigate("/login");
-        toast.error(error.code, {
-          id: toastId,
-        });
       }, 1001);
-      console.log(error)
+      console.log(error);
       if (error.response.data.msg == "unauthorized! please login first") {
         setTimeout(() => {
           toast.error(error.response.data.msg, {
@@ -66,6 +63,11 @@ const MainDashboard = () => {
         localStorage.removeItem("firstVisit");
         return;
       }
+      setTimeout(() => {
+        toast.error(error.code, {
+          id: toastId,
+        });
+      }, 1000);
     }
   };
   const fetchAllPosts = async () => {
@@ -106,7 +108,6 @@ const MainDashboard = () => {
   }
   const date = formatDateSimple(new Date());
   return (
-    
     <>
       {
         <div className={style.container}>
