@@ -39,7 +39,7 @@ const Login = () => {
     if (!validateForm()) return;
     const toastId = toast.loading("Checking...");
     try {
-      await axios.post("https://pro-task-manager-3frj.vercel.app/api/sign-in", formData, {withCredentials: true});
+      await axios.post("https://pro-task-manager-3frj.vercel.app/api/sign-in", formData, { withCredentials: true });
       toast.remove(toastId);
       dispatch(isLogin(true));
       navigate("/");
