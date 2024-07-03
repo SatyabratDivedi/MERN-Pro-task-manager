@@ -16,7 +16,10 @@ app.use("/public", express.static("public"));
 
 app.use((req, res, next) => {
   const allowedOrigins = ["https://pro-task-manager.vercel.app"];
-  const origin = req.headers.origin;
+  let origin = req.headers.origin;
+  if (origin && origin.endsWith('/')) {
+    origin = origin.slice(0, -1);
+  }
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
@@ -25,8 +28,6 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
-
-// Existing app.use(cors({...})) can be removed or adjusted as needed
 
 const PORT = process.env.PORT || 3001;
 const URI = process.env.MONGO_URI;
