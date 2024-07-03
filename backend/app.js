@@ -17,8 +17,7 @@ app.use("/public", express.static("public"));
 //my main website corse is not working thats why i allow all corse
 app.use(
   cors({
-    origin: "https://pro-task-manager.vercel.app",
-    credentials: true,
+    origin: "https://pro-task-manager.vercel.app"
   })
 );
 
