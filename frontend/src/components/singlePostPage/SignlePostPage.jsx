@@ -28,6 +28,7 @@ const SignlePostPage = () => {
     const [day, month, year] = dateString.split("/");
     const date = new Date(year, month - 1, day);
     const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
     const isOlder = date < currentDate;
     const formattedDate = format(date, "MMM do");
     const color = isOlder ? "#CF3636" : "#DBDBDB";
