@@ -90,7 +90,7 @@
   display: none;
   position: absolute;
   width: 87%;
-  top: 10px;
+  top: 0;
   left: 1;
   background-color: rgba(214, 214, 214, 0.863);
   font-size: 12px;
@@ -104,7 +104,7 @@
   position: absolute;
   margin-left: -5px;
   border-width: 5px;
-  bottom: -10px;
+  bottom: -7px;
   left: 50%;
   border-style: solid;
   border-color: black transparent transparent transparent;

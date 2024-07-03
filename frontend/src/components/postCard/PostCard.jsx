@@ -29,7 +29,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
 
   const shareTodoHandler = (postId) => {
     setThreeDotOpen(false);
-    navigator.clipboard.writeText(`http://localhost:5173/post/${postId}`).then(() => {
+    navigator.clipboard.writeText(`https://pro-task-manager.vercel.app/post/${postId}`).then(() => {
       toast.success("Copied to clipboard");
     });
   };
@@ -133,7 +133,7 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
         </div>
       )}
       <div onMouseEnter={() => setTooltip(true)} onMouseLeave={() => setTooltip(false)} className={style.hero}>
-        {post.title ? post.title.slice(0, 30) + (post.title.length > 30 ? "..." : "") : <Skeleton width={"50px"} />}
+        {post.title ? post.title.slice(0, 25) + (post.title.length > 25 ? "..." : "") : <Skeleton width={"50px"} />}
       </div>
       <div className={style.checklist}>
         <div>
