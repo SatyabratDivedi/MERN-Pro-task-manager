@@ -15,14 +15,12 @@ app.use(express.static(__dirname + "/public"));
 app.use("/public", express.static("public"));
 
 //my main website corse is not working thats why i allow all corse
-
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin) return callback(null, true);
-    return callback(null, true);
-  },
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "https://pro-task-manager.vercel.app",
+    credentials: true,
+  })
+);
 
 const PORT = process.env.PORT || 3001;
 const URI = process.env.MONGO_URI;
