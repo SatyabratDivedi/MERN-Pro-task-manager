@@ -16,7 +16,7 @@ app.use("/public", express.static("public"));
 
 app.use(
   cors({
-    origin: "https://pro-task-manager.vercel.app/",
+    origin: "https://pro-task-manager.vercel.app",
     credentials: true,
   })
 );
