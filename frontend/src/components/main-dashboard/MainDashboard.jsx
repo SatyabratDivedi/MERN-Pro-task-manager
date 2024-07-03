@@ -76,7 +76,7 @@ const MainDashboard = () => {
       setAllPosts(res.data);
       setLoader(false);
     } catch (error) {
-      toast.error(error.response.data.msg);
+      console.log('something wrong')
     }
   };
   useEffect(() => {
