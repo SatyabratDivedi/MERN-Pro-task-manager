@@ -71,7 +71,6 @@ const PostCard = ({collapse, catogary, post, loginUser}) => {
     const isOlder = date < currentDate;
     const formattedDate = format(date, "MMM do");
     const color = isOlder ? "#CF3636" : "#DBDBDB";
-
     return {formattedDate, color};
   };
 

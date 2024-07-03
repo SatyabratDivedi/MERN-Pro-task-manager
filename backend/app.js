@@ -21,6 +21,12 @@ app.use(
   })
 );
 
+res.cookie('cookieName', 'cookieValue', {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'None',
+});
+
 const PORT = process.env.PORT || 3001;
 const URI = process.env.MONGO_URI;
 
