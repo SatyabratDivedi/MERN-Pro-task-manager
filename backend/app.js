@@ -14,20 +14,12 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 app.use("/public", express.static("public"));
 
-app.use((req, res, next) => {
-  const allowedOrigins = ["https://pro-task-manager.vercel.app"];
-  let origin = req.headers.origin;
-  if (origin && origin.endsWith('/')) {
-    origin = origin.slice(0, -1);
-  }
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  next();
-});
+app.use(
+  cors({
+    origin: "https://pro-task-manager.vercel.app/",
+    credentials: true,
+  })
+);
 
 const PORT = process.env.PORT || 3001;
 const URI = process.env.MONGO_URI;
