@@ -52,6 +52,7 @@ const MainDashboard = () => {
       setTimeout(() => {
         navigate("/login");
       }, 1001);
+      console.log(error)
       if (error.response.data.msg == "unauthorized! please login first") {
         setTimeout(() => {
           toast.error(error.response.data.msg, {
