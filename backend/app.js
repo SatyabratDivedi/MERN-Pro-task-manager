@@ -16,7 +16,7 @@ app.use("/public", express.static("public"));
 
 app.use(
   cors({
-    origin: "https://task-manager.skdivedi.me",
+    origin: "https://task-manager.skdivedi.dev",
     credentials: true,
   })
 );
